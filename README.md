@@ -42,11 +42,13 @@ Agar.io is a very simple yet engaging game. The point of the game is to increase
   * HTML5 Canvas for DOM manipulation and rendering
 
 * ## Implementation Timeline
-  * Weekend/Monday
+  * Thursday
     * Create the App Framework, Background, & Game View Port 
+    
+  * Friday
     * Create the Player Object/Movement
 
-  * Tuesday/Wednesday
+  * Weekend/Monday
     * Create and continuously populate the board with inanimate mass objects
     * A player's mass/size increase when a player consumes an inanimate mass object
 
