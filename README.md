@@ -3,6 +3,14 @@
 
 Agar.io is a very simple yet engaging game. The point of the game is to increase your mass by eating food and other players and to avoid players larger than you. The larger you are, the slower you move. You can also eject half of your mass to capture/eat other players!
 
+  * Wireframes
+   
+    * Homepage ![Homepage](https://github.com/r0ckf0rd/mass/blob/master/assets/Homepage.png) <br/><br/>
+
+    * Gameplay ![Gameplay](https://github.com/r0ckf0rd/mass/blob/master/assets/Gameplay.png) <br/><br/>
+
+    * Gameplay Annotated ![Gameplay Annotated](https://github.com/r0ckf0rd/mass/blob/master/assets/Gameplay-Annotated.png) <br/><br/>
+
 * ## Functionality and MVP Features
 1. Basic App Framework
    1. Background
