@@ -5,11 +5,11 @@ Agar.io is a very simple yet engaging game. The point of the game is to increase
 
   * Wireframes
    
-    * Homepage ![Homepage](https://github.com/r0ckf0rd/mass/blob/master/assets/Homepage.png) <br/><br/>
+    * Homepage ![Homepage](https://github.com/r0ckf0rd/mass/blob/master/assets/images/Homepage.png) <br/><br/>
 
-    * Gameplay ![Gameplay](https://github.com/r0ckf0rd/mass/blob/master/assets/Gameplay.png) <br/><br/>
+    * Gameplay ![Gameplay](https://github.com/r0ckf0rd/mass/blob/master/assets/images/Gameplay.png) <br/><br/>
 
-    * Gameplay Annotated ![Gameplay Annotated](https://github.com/r0ckf0rd/mass/blob/master/assets/Gameplay-Annotated.png) <br/><br/>
+    * Gameplay Annotated ![Gameplay Annotated](https://github.com/r0ckf0rd/mass/blob/master/assets/images/Gameplay-Annotated.png) <br/><br/>
 
 * ## Functionality and MVP Features
 1. Basic App Framework

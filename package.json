@@ -1,0 +1,30 @@
+{
+  "name": "mass",
+  "version": "1.0.0",
+  "description": "Mass is an Agar.io clone made with in Vanilla Javascript and Canvas",
+  "main": "./src/mass.js",
+  "directories": {
+    "src": "src"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "webpack": "webpack --watch --mode=development"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/r0ckf0rd/mass.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/r0ckf0rd/mass/issues"
+  },
+  "homepage": "https://github.com/r0ckf0rd/mass#readme",
+  "dependencies": {
+    "@babel/core": "^7.4.3",
+    "babel-loader": "^8.0.5",
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.3.0"
+  }
+}
