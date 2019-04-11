@@ -34,9 +34,17 @@
             fix_dpi();
         
             //draw stuff!
-            context.strokeRect(100, 100, 200, 200);
-            context.font = "30px Arial";
-            context.fillText("Mass!", 160, 205);
+            // context.strokeRect(100, 100, 200, 200);
+            context.beginPath();
+            context.arc(
+                canvas.width / 2,
+                canvas.height / 2, 40,  //40 pix radius circle at 100,100 
+                0, Math.PI * 2,  //0 to 360 degrees for a full circle
+            );
+            context.closePath();
+            context.stroke();
+            // context.font = "30px Arial";
+            // context.fillText("Mass!", 160, 205);
             requestAnimationFrame(draw);
         }
 
