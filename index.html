@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="assets/stylesheets/canvas.css">
+    <title>Mass</title>
+</head>
+<body>
+    <canvas id='canvas'></canvas>
+    <script>
+        let canvas = document.getElementById('canvas'),
+        context = canvas.getContext('2d'),
+        dpi = window.devicePixelRatio;
+        
+        function fix_dpi() {
+            let style = {
+                height() {
+                    return +getComputedStyle(canvas).getPropertyValue('height').slice(0,-2);
+                },
+                width() {
+                    return +getComputedStyle(canvas).getPropertyValue('width').slice(0,-2);
+                }
+            }   
+
+            canvas.setAttribute('width', style.width() * dpi);
+            canvas.setAttribute('height', style.height() * dpi);
+        }
+        
+        function draw() {
+            //call the dpi fix every time
+            //canvas is redrawn
+            fix_dpi();
+        
+            //draw stuff!
+            context.strokeRect(100, 100, 200, 200);
+            context.font = "30px Arial";
+            context.fillText("Mass!", 160, 205);
+            requestAnimationFrame(draw);
+        }
+
+        requestAnimationFrame(draw);
+    </script>
+</body>
+</html>
