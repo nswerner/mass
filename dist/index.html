@@ -4,55 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <script type="application/javascript" src="./bundle.js"></script>
+
     <link rel="stylesheet" href="../assets/stylesheets/canvas.css">
+
     <title>Mass</title>
 </head>
 <body>
     <canvas id='canvas'></canvas>
-    <!-- <script>
-        let canvas = document.getElementById('canvas'),
-        context = canvas.getContext('2d'),
-        dpi = window.devicePixelRatio;
-        
-        function fix_dpi() {
-            let style = {
-                height() {
-                    return +getComputedStyle(canvas).getPropertyValue('height').slice(0,-2);
-                },
-                width() {
-                    return +getComputedStyle(canvas).getPropertyValue('width').slice(0,-2);
-                }
-            }   
-
-            canvas.setAttribute('width', style.width() * dpi);
-            canvas.setAttribute('height', style.height() * dpi);
-        }
-        
-        function draw() {
-            //call the dpi fix every time
-            //canvas is redrawn
-            fix_dpi();
-        
-            //draw stuff!
-            // context.strokeRect(100, 100, 200, 200);
-            context.beginPath();
-            context.arc(
-                canvas.width / 2,
-                canvas.height / 2, 40,  //40 pix radius circle at 100,100 
-                0, Math.PI * 2,  //0 to 360 degrees for a full circle
-            );
-            context.closePath();
-            context.fillStyle = "#9A1CEB"
-            context.stroke();
-            context.fill();
-            // context.font = "30px Arial";
-            // context.fillText("Mass!", 160, 205);
-            requestAnimationFrame(draw);
-        }
-
-        requestAnimationFrame(draw);
-    </script> -->
-    
-    <script type="application/javascript" src="./bundle.js"></script>
 </body>
 </html>

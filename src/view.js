@@ -1,7 +1,13 @@
+// import { player } from './mass';
+
+
+
 class View {
-    constructor(game, ctx) {
-        this.ctx = ctx;
+    constructor(game, canvas, ctx) {
         this.game = game;
+        this.canvas = canvas;
+        this.ctx = ctx;
+
         // this.player = this.game.addPlayer();
     }
 
