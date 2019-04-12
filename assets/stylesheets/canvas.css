@@ -7,3 +7,13 @@ body {
     height: 99.9vh;
     margin: auto;
 }
+
+html::-webkit-scrollbar { width: 0 !important }
+
+html { overflow: -moz-scrollbars-none; }
+
+html { -ms-overflow-style: none; }
+
+html {
+    cursor: none;
+}

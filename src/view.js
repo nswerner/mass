@@ -3,10 +3,11 @@
 
 
 class View {
-    constructor(game, canvas, ctx) {
+    constructor(game, canvas, ctx, dpi) {
         this.game = game;
         this.canvas = canvas;
         this.ctx = ctx;
+        this.dpi = dpi;
 
         // this.player = this.game.addPlayer();
     }

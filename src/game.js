@@ -2,18 +2,18 @@ const Player = require('./player');
 // const Matter = require('./matter');
 
 class Game {
-    constructor(height, width, context) {
+    constructor(height, width, context, dpi) {
         this.players = [];
         this.matter = [];
         this.height = height;
         this.width = width;
         this.context = context;
-        this.dpi = window.devicePixelRatio;
+        this.dpi = dpi;
 
         // this.addMatter();
 
         this.fix_dpi = this.fix_dpi.bind(this);
-        this.player = new Player(height, width, this.context);
+        this.player = new Player(height, width, this.context, this.dpi);
         this.draw = this.draw.bind(this);
     }
 
@@ -33,16 +33,12 @@ class Game {
 
 
     draw() {
-    
         this.fix_dpi();
         this.context.clearRect(0, 0, this.width, this.height);
         
         this.player.draw();
-        this.context.save();
-        this.context.restore();
 
         requestAnimationFrame(this.draw);
-       
     }
 
 

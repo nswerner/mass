@@ -23,12 +23,8 @@ document.addEventListener("DOMContentLoaded", () => {
     height = canvas.height;
     width = canvas.width;
 
-    const game = new Game(height, width, context);
-    new View(game, height, width, context);
+    const game = new Game(height, width, context, dpi);
+    new View(game, height, width, context, dpi);
     game.draw();
 
 });
-
-// export const canvas;
-// export const context;
-// export const game;
