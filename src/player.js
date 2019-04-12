@@ -11,8 +11,8 @@ class Player {
         this.y = height / 2;
         this.radius = 15;
 
-        this.dx = 0.5;
-        this.dy = 0.5;
+        this.dx = 0.2;
+        this.dy = 0.2;
         this.speed = [this.dx, this.dy];
 
         this.context = context;
@@ -28,7 +28,7 @@ class Player {
     }
 
     mouseMoveHandler(e) {
-        debugger
+
         let currentPos = [this.x, this.y];
         let mousePos = [e.clientX * this.dpi, e.clientY * this.dpi];
         const middle = [this.width / 2, this.height / 2];
@@ -65,7 +65,7 @@ class Player {
     //     let currentPos = [this.x, this.y];
     //     let mousePos = [e.clientX * this.dpi, e.clientY * this.dpi];
 
-    //     debugger
+    //   
 
     //     let nextPos = [];
 
@@ -82,7 +82,7 @@ class Player {
     //     this.x = nextPos[0];
     //     this.y = nextPos[1];
 
-    //     debugger
+    //   
     // }
 
 //     move() {
