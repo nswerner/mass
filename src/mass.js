@@ -27,7 +27,6 @@ document.addEventListener("DOMContentLoaded", () => {
     new View(game, height, width, context);
     game.draw();
 
-    debugger
 });
 
 // export const canvas;
