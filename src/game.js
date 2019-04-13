@@ -1,5 +1,6 @@
 const Player = require('./player');
 const Matter = require('./matter');
+const { COLORS } = require('../assets/palette/palette');
 
 class Game {
     constructor(height, width, context, dpi) {
@@ -18,19 +19,16 @@ class Game {
         this.createMatter = this.createMatter.bind(this);
     }
 
-    createMatter(x) {
-        for (let idx = 0; idx < x; idx += 1) {
-            let localMatter = new Matter(this.height, this.width, this.context, this.dpi);
+    createMatter(n) {
+        for (let idx = 0; idx < n; idx += 1) {
+            let localMatter = new Matter(this.height, this.width, this.context, this.dpi, COLORS[Math.floor(Math.random() * COLORS.length)]);
             this.matter.push(localMatter);
-            localMatter.draw();
         } 
     }
 
     updateMatter() {
 
     }
-
-
 
     fix_dpi() {
         let style = {
@@ -54,7 +52,11 @@ class Game {
         let matter;
         for (let idx = 0; idx < this.matter.length; idx += 1) {
             matter = this.matter[idx];
-            matter.draw();
+            if (matter.isCollidedWith(this.player) === true) {
+                this.matter.splice(idx, 1);
+            } else {
+                matter.draw();
+            }
         }
 
         this.player.draw();
