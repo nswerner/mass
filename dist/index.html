@@ -8,10 +8,34 @@
     <script type="application/javascript" src="./bundle.js"></script>
 
     <link rel="stylesheet" href="../assets/stylesheets/canvas.css">
+    <link rel="stylesheet" href="../assets/stylesheets/modal.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+        integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
 
     <title>Mass</title>
 </head>
 <body>
-    <canvas id='canvas'></canvas>
+    <canvas id='canvas'></canvas> 
+    <div id="start-modal" class="modal">
+    
+        <div class="modal-content">
+    
+            <div class="modal-header">
+                Mass!
+            </div>
+            <!-- <div class="modal-text">
+                        Split your mass by pressing the space bar
+                    </div> -->
+    
+            <span class="start">Start!</span>
+    
+            <div class="modal-links">
+                <a class="link-me" href="https://github.com/r0ckf0rd/mass"><i class="fab fa-github-square"></i></a>
+                <a class="link-me" href="https://www.linkedin.com/in/nicholas-werner-7971606b/"><i class="fab fa-linkedin"></i></a>
+                <a class="link-me" href=""><i class="fas fa-user-astronaut"></i></a>
+            </div>
+        </div>
+    </div>
+    <script type="application/javascript" src="../src/modal.js"> </script>
 </body>
 </html>
