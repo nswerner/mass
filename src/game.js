@@ -12,11 +12,24 @@ class Game {
         this.dpi = dpi;
 
         this.createMatter(50);
+        this.repopulateMatter(3, 5)
 
         this.player = new Player(height, width, this.context, this.dpi);
         this.fix_dpi = this.fix_dpi.bind(this);
         this.draw = this.draw.bind(this);
         this.createMatter = this.createMatter.bind(this);
+        this.repopulateMatter = this.repopulateMatter.bind(this);
+       
+    }
+
+    repopulateMatter(n, seconds) {
+        setInterval( () => {
+            if (this.matter.length < 20) {
+                this.createMatter(n + 5);
+            } else if (this.matter.length < 40) {
+                this.createMatter(n);
+            }
+        }, seconds * 1000);
     }
 
     createMatter(n) {
@@ -44,7 +57,7 @@ class Game {
     draw() {
         this.fix_dpi();
         this.context.clearRect(0, 0, this.width, this.height);
-        
+
         let matter;
         for (let idx = 0; idx < this.matter.length; idx += 1) {
             matter = this.matter[idx];

@@ -14,6 +14,11 @@ class Player {
         this.dx = 0.5 - (0.025 * this.radius);
         this.dy = 0.5 - (0.025 * this.radius);
 
+        if (this.dx < 0.01) {
+            this.dx = 0.01;
+            this.dy = 0.01;
+        }
+
         this.speed = [this.dx, this.dy];
 
         this.context = context;
