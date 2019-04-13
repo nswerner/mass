@@ -11,13 +11,13 @@ class Player {
         this.y = height / 2;
         this.radius = 15;
 
-        this.dx = 0.5 - (0.025 * this.radius);
-        this.dy = 0.5 - (0.025 * this.radius);
+        this.dx = 0.5;
+        this.dy = 0.5;
 
-        if (this.dx < 0.01) {
-            this.dx = 0.01;
-            this.dy = 0.01;
-        }
+        // if (this.dx < 0.01) {
+        //     this.dx = 0.01;
+        //     this.dy = 0.01;
+        // }
 
         this.speed = [this.dx, this.dy];
 
@@ -60,11 +60,19 @@ class Player {
 
         let distance = Math.sqrt(distanceArray[0] * distanceArray[0] + distanceArray[1] * distanceArray[1]);
 
+        let relativeDx = this.dx - (0.0025 * this.radius);
+        let relativeDy = relativeDx;
+        
+        if (relativeDx < 0.01) {
+            relativeDx = 0.01;
+            relativeDy = 0.01;
+        };
+
         if (distance > 1) {
-            this.x += distanceArray[0] * this.dx;
-            this.y += distanceArray[1] * this.dy;
+            this.x += distanceArray[0] * relativeDx;
+            this.y += distanceArray[1] * relativeDy;
         }
-    
+
     }
 
     // mouseMoveHandler(e) {
