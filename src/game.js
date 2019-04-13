@@ -11,7 +11,7 @@ class Game {
         this.context = context;
         this.dpi = dpi;
 
-        this.createMatter(20);
+        this.createMatter(50);
 
         this.player = new Player(height, width, this.context, this.dpi);
         this.fix_dpi = this.fix_dpi.bind(this);
@@ -24,10 +24,6 @@ class Game {
             let localMatter = new Matter(this.height, this.width, this.context, this.dpi, COLORS[Math.floor(Math.random() * COLORS.length)]);
             this.matter.push(localMatter);
         } 
-    }
-
-    updateMatter() {
-
     }
 
     fix_dpi() {
@@ -52,6 +48,7 @@ class Game {
         let matter;
         for (let idx = 0; idx < this.matter.length; idx += 1) {
             matter = this.matter[idx];
+
             if (matter.isCollidedWith(this.player) === true) {
                 this.matter.splice(idx, 1);
             } else {

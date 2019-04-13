@@ -11,8 +11,9 @@ class Player {
         this.y = height / 2;
         this.radius = 15;
 
-        this.dx = 0.2;
-        this.dy = 0.2;
+        this.dx = 0.5 - (0.025 * this.radius);
+        this.dy = 0.5 - (0.025 * this.radius);
+
         this.speed = [this.dx, this.dy];
 
         this.context = context;
@@ -25,6 +26,10 @@ class Player {
         // this.move = this.move.bind(this);
 
         document.addEventListener("mousemove", this.mouseMoveHandler, false);
+    }
+
+    consumeMatter(object) {
+        this.radius += object.mass / 1.25;
     }
 
     mouseMoveHandler(e) {
@@ -47,9 +52,6 @@ class Player {
                 distanceArray[idx] = 0;
             }
         }
-
-        // let xDistance = mousePos[0] - this.x;
-        // let yDistance = mousePos[1] - this.y;
 
         let distance = Math.sqrt(distanceArray[0] * distanceArray[0] + distanceArray[1] * distanceArray[1]);
 
