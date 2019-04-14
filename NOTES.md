@@ -4,6 +4,7 @@
 
 2) Create Scale
 
-3) Create Start Game Modals
+3) Change Movement to continue in the direction of the mouse from center
+    - give indicator of movement direction
 
-4) Create Enemies
+3) Create Enemies

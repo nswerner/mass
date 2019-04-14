@@ -24,7 +24,9 @@ class Game {
 
     repopulateMatter(n, seconds) {
         setInterval( () => {
-            if (this.matter.length < 20) {
+            if (this.matter.length < 8) {
+                this.createMatter(n + 10)
+            } else if (this.matter.length < 20) {
                 this.createMatter(n + 5);
             } else if (this.matter.length < 40) {
                 this.createMatter(n);
