@@ -1,5 +1,6 @@
 const Game = require("./game");
-const View = require("./view");
+const Camera = require("./camera");
+
 
 
 
@@ -20,11 +21,10 @@ document.addEventListener("DOMContentLoaded", () => {
     canvas.setAttribute('width', style.width() * dpi);
     canvas.setAttribute('height', style.height() * dpi);
     
-    height = canvas.height;
-    width = canvas.width;
+    canvasHeight = canvas.height;
+    canvasWidth = canvas.width;
 
-    const game = new Game(height, width, context, dpi);
-    new View(game, height, width, context, dpi);
+    const game = new Game(canvasWidth, canvasHeight, context, dpi);
+
     game.draw();
-
 });

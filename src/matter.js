@@ -3,26 +3,29 @@ const { Game } = require("./game");
 
 
 class Matter {
-    constructor(height, width, context, dpi, color, consumed = false) {
+    constructor(boardWidth, boardHeight, canvasWidth, canvasHeight, context, dpi, color, consumed = false) {
         this.context = context;
         this.dpi = dpi;
-        this.height = height;
-        this.width = width;
 
-        this.x = Math.floor(Math.random() * this.width);
-        this.y = Math.floor(Math.random() * this.height);
+        this.boardWidth = boardWidth;
+        this.boardHeight = boardHeight;
+
+        this.canvasWidth = canvasWidth;
+        this.canvasHeight = canvasHeight;
+
+        this.boardX = Math.floor(Math.random() * this.boardWidth);
+        this.boardY = Math.floor(Math.random() * this.boardHeight);
 
         this.mass = 1;
 
         this.consumed = false;
         this.color = color;
         this.draw = this.draw.bind(this);
-        this.draw();
     }
 
     isCollidedWith(object) {
-        var playerHitbox = { radius: object.radius, x: object.x, y: object.y };
-        var matterHitbox = { radius: 5, x: this.x, y: this.y };
+        var playerHitbox = { radius: object.radius, x: object.boardX, y: object.boardY };
+        var matterHitbox = { radius: 5, x: this.boardX, y: this.boardY };
 
         var dx = playerHitbox.x - matterHitbox.x;
         var dy = playerHitbox.y - matterHitbox.y;
@@ -30,7 +33,7 @@ class Matter {
 
         if (distance < playerHitbox.radius + matterHitbox.radius) {
             this.consumed = true;
-            //
+            debugger
             object.consumeMatter(this);
             //
             return true;
@@ -39,10 +42,13 @@ class Matter {
         }
     }
 
-    draw() {
+    draw(cameraX, cameraY) {
         this.context.fillStyle = this.color;
-        this.context.fillRect(this.x, this.y, 10, 10);
-        this.context.save();
+        this.context.fillRect(
+            this.boardX - cameraX,
+            this.boardY - cameraY,
+            12, 12
+        );
     }
 
     

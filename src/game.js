@@ -1,45 +1,24 @@
-const Player = require('./player');
-const Matter = require('./matter');
+// const Player = require('./player');
+// const Matter = require('./matter');
+const Board = require('./board');
+const Camera = require('./camera');
 const { COLORS } = require('../assets/palette/palette');
 
+
 class Game {
-    constructor(height, width, context, dpi) {
-        this.players = [];
-        this.matter = [];
-        this.height = height;
-        this.width = width;
+    constructor(canvasWidth, canvasHeight, context, dpi) {
+        this.canvasHeight = canvasHeight;
+        this.canvasWidth = canvasWidth;
         this.context = context;
         this.dpi = dpi;
 
-        this.createMatter(50);
-        this.repopulateMatter(3, 5)
+        this.board = new Board(10000, 5000, this.canvasWidth, this.canvasHeight, this.context, this.dpi);
+        this.camera = new Camera(this.board, this.canvasWidth, this.canvasHeight, this.context, this.dpi);
 
-        this.player = new Player(height, width, this.context, this.dpi);
         this.fix_dpi = this.fix_dpi.bind(this);
         this.draw = this.draw.bind(this);
-        this.createMatter = this.createMatter.bind(this);
-        this.repopulateMatter = this.repopulateMatter.bind(this);
-       
     }
 
-    repopulateMatter(n, seconds) {
-        setInterval( () => {
-            if (this.matter.length < 8) {
-                this.createMatter(n + 10)
-            } else if (this.matter.length < 20) {
-                this.createMatter(n + 5);
-            } else if (this.matter.length < 40) {
-                this.createMatter(n);
-            }
-        }, seconds * 1000);
-    }
-
-    createMatter(n) {
-        for (let idx = 0; idx < n; idx += 1) {
-            let localMatter = new Matter(this.height, this.width, this.context, this.dpi, COLORS[Math.floor(Math.random() * COLORS.length)]);
-            this.matter.push(localMatter);
-        } 
-    }
 
     fix_dpi() {
         let style = {
@@ -55,30 +34,16 @@ class Game {
         canvas.setAttribute('height', style.height() * this.dpi);
     }
 
-
     draw() {
         this.fix_dpi();
-        this.context.clearRect(0, 0, this.width, this.height);
+        this.context.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
+        // this.board.draw();
 
-        let matter;
-        for (let idx = 0; idx < this.matter.length; idx += 1) {
-            matter = this.matter[idx];
-
-            if (matter.isCollidedWith(this.player) === true) {
-                this.matter.splice(idx, 1);
-            } else {
-                matter.draw();
-            }
-        }
-
-        this.player.draw();
+        this.camera.updatePos();
+        this.camera.draw();
 
         requestAnimationFrame(this.draw);
     }
-
-
-
-
 
 }
 
