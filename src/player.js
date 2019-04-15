@@ -19,19 +19,22 @@ class Player {
 
         this.radius = 15;
 
-        this.dx = 0.05;
-        this.dy = 0.05;
+        // this.dx = 0.05;
+        // this.dy = 0.05;
 
-        this.speed = [this.dx, this.dy];
+        // this.speed = [this.dx, this.dy];
+
+        this.speed = 5;
+        this.dXdY = [0, 0];
+        this.cursorDistance = 1;
 
         this.consumed = false;
         this.color = COLORS[Math.floor(Math.random() * COLORS.length)];
         this.color2 = COLORS[Math.floor(Math.random() * COLORS.length)];
 
         this.draw = this.draw.bind(this);
-        this.mouseMoveHandler = this.mouseMoveHandler.bind(this);
-       
-        // this.move = this.move.bind(this);
+        this.mouseMoveHandler = this.mouseMoveHandler.bind(this); 
+        this.move = this.move.bind(this);
 
         document.addEventListener("mousemove", this.mouseMoveHandler, false);
     }
@@ -44,7 +47,7 @@ class Player {
 
     mouseMoveHandler(e) {
 
-        let currentPos = [this.boardX, this.boardY];
+        // let currentPos = [this.boardX, this.boardY];
 
         let mousePos = [e.clientX * this.dpi, e.clientY * this.dpi];
         let canvasMiddle = [this.canvasWidth / 2, this.canvasHeight / 2];
@@ -52,36 +55,51 @@ class Player {
         let xDistance;
         let yDistance;
 
-        let distanceArray = [xDistance, yDistance];
+       this.dXdY = [xDistance, yDistance];
 
         for (let idx = 0; idx < 2; idx += 1) {
-            distanceArray[idx] = mousePos[idx] - canvasMiddle[idx];
+            this.dXdY[idx] = mousePos[idx] - canvasMiddle[idx];
         }
 
-        let relativeDx = this.dx - (0.0025 * this.radius);
-        let relativeDy = relativeDx;
+        debugger
+        this.cursorDistance = Math.sqrt(this.dXdY[0] * this.dXdY[0] + this.dXdY[1] * this.dXdY[1])
 
-        if (relativeDx < 0.01) {
-            relativeDx = 0.01;
-            relativeDy = 0.01;
-        };
+        // let relativeDx = this.dx - (0.0025 * this.radius);
+        // let relativeDy = relativeDx;
+
+        // if (relativeDx < 0.01) {
+        //     relativeDx = 0.01;
+        //     relativeDy = 0.01;
+        // };
 
 
-        if (this.boardX + distanceArray[0] * relativeDx < this.radius/2) {
-            this.boardX = this.radius / 2;
-        } else if (this.boardX + (distanceArray[0] * relativeDx) > this.board.boardWidth - this.radius) {
-            this.boardX = this.board.boardWidth - this.radius / 2;
-        } else {
-            this.boardX += distanceArray[0] * relativeDx;
-        }
+        // if (this.boardX + dXdY[0] * relativeDx < this.radius/2) {
+        //     this.boardX = this.radius / 2;
+        // } else if (this.boardX + (dXdY[0] * relativeDx) > this.board.boardWidth - this.radius) {
+        //     this.boardX = this.board.boardWidth - this.radius / 2;
+        // } else {
+        //     this.boardX += dXdY[0] * relativeDx;
+        // }
 
-        if (this.boardY + distanceArray[1] * relativeDy < this.radius) {
-            this.boardY = this.radius / 2;
-        } else if (this.boardY + distanceArray[1] * relativeDy > this.board.boardHeight - this.radius) {
-            this.boardY = this.board.boardHeight - this.radius / 2;
-        } else {
-            this.boardY += distanceArray[1] * relativeDy;
-        }
+        // if (this.boardY + dXdY[1] * relativeDy < this.radius) {
+        //     this.boardY = this.radius / 2;
+        // } else if (this.boardY + dXdY[1] * relativeDy > this.board.boardHeight - this.radius) {
+        //     this.boardY = this.board.boardHeight - this.radius / 2;
+        // } else {
+        //     this.boardY += dXdY[1] * relativeDy;
+        // }
+    }
+
+
+    move() {
+        let nextPos = [];
+
+        debugger
+        nextPos[0] = this.boardX + this.dXdY[0] / this.cursorDistance;
+        nextPos[1] = this.boardY + this.dXdY[1] / this.cursorDistance;
+
+        this.boardX = nextPos[0];
+        this.boardY = nextPos[1];
     }
 
     draw() {
@@ -89,21 +107,22 @@ class Player {
         this.context.arc(
             this.centerX, this.centerY,
             this.radius, 0, Math.PI * 2,
-        );
-
-        let gradient = this.context.createLinearGradient(
-            this.centerX - this.radius,
-            this.centerY - this.radius,
-            this.centerX + this.radius,
-            this.centerY + this.radius
-        );
-
-        gradient.addColorStop(0, this.color);
-        gradient.addColorStop(1, this.color2);
-
-        this.context.fillStyle = gradient;
-        this.context.fill();
-    
+            );
+            
+            let gradient = this.context.createLinearGradient(
+                this.centerX - this.radius,
+                this.centerY - this.radius,
+                this.centerX + this.radius,
+                this.centerY + this.radius
+            );
+                
+            gradient.addColorStop(0, this.color);
+            gradient.addColorStop(1, this.color2);
+            
+            this.context.fillStyle = gradient;
+            this.context.fill();
+            this.move();
+                
         // UP
         // if (this.centerY + -this.dy < this.radius) {
         //     // hit top border and keep this.centerY @ radius/2;
