@@ -50,20 +50,12 @@ class Camera {
 
         let matter;
         for (let idx = 0; idx < this.matter.length; idx += 1) {
-<<<<<<< HEAD
-    
-=======
->>>>>>> camera
             matter = this.matter[idx];
 
             if (matter.isCollidedWith(this.player) === true || matter.consumed === true) {
                 this.matter.splice(idx, 1);
                 idx -= 1;
             } else {
-<<<<<<< HEAD
-        
-=======
->>>>>>> camera
                 matter.draw(this.boardX, this.boardY);
             }
         }
@@ -72,11 +64,8 @@ class Camera {
     draw() {
         this.within();
 
-<<<<<<< HEAD
-=======
         //draw board border
         
->>>>>>> camera
         //draw matter
         this.drawMatter();
         
