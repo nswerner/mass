@@ -40,7 +40,8 @@ class Camera {
                 this.matter.push(this.allMatter[idx]);
             }
         }
-
+        window.cameraMatter = this.matter;
+        window.allMatter = this.allMatter;
         // include logic to do computers within once they're created
     }
 
@@ -49,14 +50,12 @@ class Camera {
 
         let matter;
         for (let idx = 0; idx < this.matter.length; idx += 1) {
-            
             matter = this.matter[idx];
 
             if (matter.isCollidedWith(this.player) === true || matter.consumed === true) {
                 this.matter.splice(idx, 1);
                 idx -= 1;
             } else {
-                
                 matter.draw(this.boardX, this.boardY);
             }
         }
@@ -64,12 +63,16 @@ class Camera {
 
     draw() {
         this.within();
+
+        //draw board border
         
         //draw matter
         this.drawMatter();
-          
+        
         //draw player
         this.player.draw();  
+        // this.board.draw();
+        //board draw here actually applies stroke to player???
     }
 
 }

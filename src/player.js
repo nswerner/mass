@@ -24,9 +24,11 @@ class Player {
 
         // this.speed = [this.dx, this.dy];
 
+        
         this.speed = 5;
-        this.dXdY = [0, 0];
+        this.dXdY = [1, 1];
         this.cursorDistance = 1;
+        this.prevMousePos = [1, 1];
 
         this.consumed = false;
         this.color = COLORS[Math.floor(Math.random() * COLORS.length)];
@@ -46,7 +48,6 @@ class Player {
 
 
     mouseMoveHandler(e) {
-
         let mousePos = [e.clientX * this.dpi, e.clientY * this.dpi];
         let canvasMiddle = [this.canvasWidth / 2, this.canvasHeight / 2];
 
@@ -55,11 +56,17 @@ class Player {
 
        this.dXdY = [xDistance, yDistance];
 
+        // for (let idx = 0; idx < 2; idx += 1) {
+        //     this.dXdY[idx] = mousePos[idx] - this.prevMousePos[idx];
+        // }
+
         for (let idx = 0; idx < 2; idx += 1) {
             this.dXdY[idx] = mousePos[idx] - canvasMiddle[idx];
         }
 
         this.cursorDistance = Math.sqrt(this.dXdY[0] * this.dXdY[0] + this.dXdY[1] * this.dXdY[1]);
+        this.prevMousePos[0] = mousePos[0];
+        this.prevMousePos[1] = mousePos[1];
     }
 
 
@@ -109,54 +116,19 @@ class Player {
             this.radius, 0, Math.PI * 2,
             );
             
-            let gradient = this.context.createLinearGradient(
-                this.centerX - this.radius,
-                this.centerY - this.radius,
-                this.centerX + this.radius,
-                this.centerY + this.radius
-            );
-                
-            gradient.addColorStop(0, this.color);
-            gradient.addColorStop(1, this.color2);
+        let gradient = this.context.createLinearGradient(
+            this.centerX - this.radius,
+            this.centerY - this.radius,
+            this.centerX + this.radius,
+            this.centerY + this.radius
+        );
             
-            this.context.fillStyle = gradient;
-            this.context.fill();
-            this.move();
-                
-        // UP
-        // if (this.centerY + -this.dy < this.radius) {
-        //     // hit top border and keep this.centerY @ radius/2;
-        //     this.centerY = this.radius/2;
-        // } else {
-        //     // otherwise, travel up at @mouse vector
-        //     this.centerY += -this.dy;
-        // }
-
-
-        // DOWN
-        // if (this.centerY + this.dy > this.canvasHeight - (this.radius / 2)) {
-        //     // hit bottom border and keep this.centerY @ this.canvasHeight + some portion of the radius;
-        //     this.centerY = this.canvasHeight - (this.radius / 2);
-        // } else {
-        //     // otherwise, travel y @ the mouse vector
-        //     this.centerY += this.dy;
-        // }
-
-
-        // RIGHT
-        // if (this.centerX + this.dx > (this.canvasWidth - this.radius / 2)) {
-        //     this.x = this.canvasWidth - (this.radius / 2);
-        // } else {
-        //     this.x += this.dx;
-        // }
-
-
-        // LEFT
-        // if (this.x + -this.dx < this.radius) {
-        //     this.x = (this.radius / 2);
-        // } else {
-        //     this.x += -this.dx;
-        // }
+        gradient.addColorStop(0, this.color);
+        gradient.addColorStop(1, this.color2);
+        
+        this.context.fillStyle = gradient;
+        this.context.fill();
+        this.move();     
     }
 
     
