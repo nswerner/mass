@@ -1,27 +1,28 @@
 const { COLORS } = require("../assets/palette/palette");
-const { Game } = require("./game");
+const { game }  = require("./mass");
+
 
 
 class Player {
-    constructor(height, width, context, dpi) {
+    constructor(canvasWidth, canvasHeight, context, dpi, board) {
+        this.canvasHeight = canvasHeight;
+        this.canvasWidth = canvasWidth;
+        this.context = context;
         this.dpi = dpi;
-        this.height = height;
-        this.width = width;
-        this.x = width / 2;
-        this.y = height / 2;
+        this.board = board;
+
+        this.centerX = this.canvasWidth / 2;
+        this.centerY = this.canvasHeight / 2;
+
+        this.boardX = Math.floor(Math.random() * this.board.boardWidth);
+        this.boardY = Math.floor(Math.random() * this.board.boardHeight);
+
         this.radius = 15;
 
-        this.dx = 0.5;
-        this.dy = 0.5;
-
-        // if (this.dx < 0.01) {
-        //     this.dx = 0.01;
-        //     this.dy = 0.01;
-        // }
+        this.dx = 0.05;
+        this.dy = 0.05;
 
         this.speed = [this.dx, this.dy];
-
-        this.context = context;
 
         this.consumed = false;
         this.color = COLORS[Math.floor(Math.random() * COLORS.length)];
@@ -29,139 +30,102 @@ class Player {
 
         this.draw = this.draw.bind(this);
         this.mouseMoveHandler = this.mouseMoveHandler.bind(this);
+       
         // this.move = this.move.bind(this);
 
         document.addEventListener("mousemove", this.mouseMoveHandler, false);
     }
 
     consumeMatter(object) {
-        this.radius += object.mass / 1.25;
+        this.radius += object.mass / 1.35;
     }
+
 
     mouseMoveHandler(e) {
 
-        let currentPos = [this.x, this.y];
+        let currentPos = [this.boardX, this.boardY];
+
         let mousePos = [e.clientX * this.dpi, e.clientY * this.dpi];
-        const middle = [this.width / 2, this.height / 2];
+        let canvasMiddle = [this.canvasWidth / 2, this.canvasHeight / 2];
 
         let xDistance;
         let yDistance;
-        
+
         let distanceArray = [xDistance, yDistance];
 
         for (let idx = 0; idx < 2; idx += 1) {
-            if (mousePos[idx] < middle[idx]) {
-                distanceArray[idx] = mousePos[idx] - currentPos[idx];
-            } else if (mousePos[idx] > middle[idx]) {
-                distanceArray[idx] = mousePos[idx] - currentPos[idx];
-            } else {
-                distanceArray[idx] = 0;
-            }
+            distanceArray[idx] = mousePos[idx] - canvasMiddle[idx];
         }
-
-        let distance = Math.sqrt(distanceArray[0] * distanceArray[0] + distanceArray[1] * distanceArray[1]);
 
         let relativeDx = this.dx - (0.0025 * this.radius);
         let relativeDy = relativeDx;
-        
+
         if (relativeDx < 0.01) {
             relativeDx = 0.01;
             relativeDy = 0.01;
         };
 
-        if (distance > 1) {
-            this.x += distanceArray[0] * relativeDx;
-            this.y += distanceArray[1] * relativeDy;
+
+        if (this.boardX + distanceArray[0] * relativeDx < this.radius/2) {
+            this.boardX = this.radius / 2;
+        } else if (this.boardX + distanceArray[0] * relativeDx > this.board.boardWidth - this.radius) {
+            this.boardX = this.board.boardWidth - this.radius / 2;
+        } else {
+            this.boardX += distanceArray[0] * relativeDx;
         }
 
+        if (this.boardY + distanceArray[1] * relativeDy < this.radius) {
+            this.boardY = this.radius / 2;
+        } else if (this.boardY + distanceArray[1] * relativeDy > this.board.boardHeight - this.radius) {
+            this.boardY = this.board.boardHeight - this.radius / 2;
+        } else {
+            this.boardY += distanceArray[1] * relativeDy;
+        }
     }
 
-    // mouseMoveHandler(e) {
-    //     const speed = [this.dx, this.dy];
-    //     let currentPos = [this.x, this.y];
-    //     let mousePos = [e.clientX * this.dpi, e.clientY * this.dpi];
-
-    //   
-
-    //     let nextPos = [];
-
-    //     for (let idx = 0; idx < 2; idx += 1) {
-    //         if (currentPos[idx] < mousePos[idx]) {
-    //             nextPos[idx] = currentPos[idx] + speed[idx];
-    //         } else if (currentPos[idx] > mousePos[idx]) {
-    //             nextPos[idx] = currentPos[idx] - speed[idx];
-    //         } else {
-    //             nextPos[idx] = currentPos[idx];
-    //         }
-    //     }
-
-    //     this.x = nextPos[0];
-    //     this.y = nextPos[1];
-
-    //   
-    // }
-
-//     move() {
-//         let xDistance = (e.clientX * this.dpi) - this.x;
-//         let yDistance = (e.clientY * this.dpi) - this.y;
-//         let distance = Math.sqrt(xDistance * xDistance + yDistance * yDistance);
-
-//         if (distance > 1) {
-//             this.x += xDistance * easingAmount;
-//             this.y += yDistance * easingAmount;
-//         }
-// }
-
-
-
     draw() {
-        //
         this.context.beginPath();
-        
         this.context.arc(
-            this.x, this.y,
+            this.centerX, this.centerY,
             this.radius, 0, Math.PI * 2,
         );
 
         let gradient = this.context.createLinearGradient(
-            this.x, 
-            this.y - (this.radius / 2), 
-            this.x + this.radius, 
-            this.y + this.radius
+            this.centerX - this.radius,
+            this.centerY - this.radius,
+            this.centerX + this.radius,
+            this.centerY + this.radius
         );
 
         gradient.addColorStop(0, this.color);
         gradient.addColorStop(1, this.color2);
-        
+
         this.context.fillStyle = gradient;
         this.context.fill();
     
-    
-
-
         // UP
-        // if (this.y + -this.dy < this.radius) {
-        //     // hit top border and keep this.y @ radius/2;
-        //     this.y = this.radius/2;
+        // if (this.centerY + -this.dy < this.radius) {
+        //     // hit top border and keep this.centerY @ radius/2;
+        //     this.centerY = this.radius/2;
         // } else {
         //     // otherwise, travel up at @mouse vector
-        //     this.y += -this.dy;
+        //     this.centerY += -this.dy;
         // }
 
 
         // DOWN
-        // if (this.y + this.dy > this.height - (this.radius / 2)) {
-        //     // hit bottom border and keep this.y @ this.height + some portion of the radius;
-        //     this.y = this.height - (this.radius / 2);
+        // if (this.centerY + this.dy > this.canvasHeight - (this.radius / 2)) {
+        //     // hit bottom border and keep this.centerY @ this.canvasHeight + some portion of the radius;
+        //     this.centerY = this.canvasHeight - (this.radius / 2);
         // } else {
         //     // otherwise, travel y @ the mouse vector
-        //     this.y += this.dy;
+        //     this.centerY += this.dy;
         // }
 
 
         // RIGHT
-        // if (this.x + this.dx > (this.width - this.radius / 2)) {
-        //     this.x = this.width - (this.radius / 2);
+        // if (this.centerX + this.dx > (this.canvasWidth - this.radius / 2)) {
+        //     this.x = this.canvasWidth - (this.radius / 2);
         // } else {
         //     this.x += this.dx;
         // }
