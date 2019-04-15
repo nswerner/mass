@@ -61,7 +61,6 @@ class Player {
             this.dXdY[idx] = mousePos[idx] - canvasMiddle[idx];
         }
 
-        debugger
         this.cursorDistance = Math.sqrt(this.dXdY[0] * this.dXdY[0] + this.dXdY[1] * this.dXdY[1])
 
         // let relativeDx = this.dx - (0.0025 * this.radius);
@@ -92,14 +91,43 @@ class Player {
 
 
     move() {
-        let nextPos = [];
-
         debugger
-        nextPos[0] = this.boardX + this.dXdY[0] / this.cursorDistance;
-        nextPos[1] = this.boardY + this.dXdY[1] / this.cursorDistance;
+        let nextPos = [];
+        
+        nextPos[0] = this.boardX + (this.dXdY[0] / this.cursorDistance) * this.speed;
+        nextPos[1] = this.boardY + (this.dXdY[1] / this.cursorDistance) * this.speed;
+        
+        let relativeX;
+        if (nextPos[0] < this.boardX) {
+            relativeX = nextPos[0] + (0.025 * this.radius);
+        } else {
+            relativeX = nextPos[0] - (0.025 * this.radius);
+        }
 
-        this.boardX = nextPos[0];
-        this.boardY = nextPos[1];
+        let relativeY;
+        if (nextPos[0] < this.boardY) {
+            relativeY = nextPos[1] + (0.025 * this.radius);
+        } else {
+            relativeY = nextPos[1] - (0.025 * this.radius);
+        }
+
+
+
+        if (relativeX < this.radius) {
+            this.boardX = this.radius;
+        } else if (relativeX > this.board.boardWidth - this.radius) {
+            this.boardX = this.board.boardWidth - this.radius;
+        } else {
+            this.boardX = relativeX;
+        }
+
+        if (relativeY < this.radius) {
+            this.boardY = this.radius;
+        } else if (relativeY > this.board.boardHeight - this.radius) {
+            this.boardY = this.board.boardHeight - this.radius;
+        } else {
+            this.boardY = relativeY;
+        }
     }
 
     draw() {
