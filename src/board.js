@@ -51,7 +51,7 @@ class Board {
         this.context.lineWidth = 3;
         this.context.rect(0, 0, this.boardWidth, this.boardHeight);
         this.context.stroke();
-
+        this.context.save();
     }
 }
 
