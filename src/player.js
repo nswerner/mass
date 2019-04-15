@@ -40,14 +40,12 @@ class Player {
     }
 
     consumeMatter(object) {
-        this.radius += object.mass / 1.35;
+        this.radius += object.mass / 1;
         object.mass = 0;
     }
 
 
     mouseMoveHandler(e) {
-
-        // let currentPos = [this.boardX, this.boardY];
 
         let mousePos = [e.clientX * this.dpi, e.clientY * this.dpi];
         let canvasMiddle = [this.canvasWidth / 2, this.canvasHeight / 2];
@@ -61,41 +59,15 @@ class Player {
             this.dXdY[idx] = mousePos[idx] - canvasMiddle[idx];
         }
 
-        this.cursorDistance = Math.sqrt(this.dXdY[0] * this.dXdY[0] + this.dXdY[1] * this.dXdY[1])
-
-        // let relativeDx = this.dx - (0.0025 * this.radius);
-        // let relativeDy = relativeDx;
-
-        // if (relativeDx < 0.01) {
-        //     relativeDx = 0.01;
-        //     relativeDy = 0.01;
-        // };
-
-
-        // if (this.boardX + dXdY[0] * relativeDx < this.radius/2) {
-        //     this.boardX = this.radius / 2;
-        // } else if (this.boardX + (dXdY[0] * relativeDx) > this.board.boardWidth - this.radius) {
-        //     this.boardX = this.board.boardWidth - this.radius / 2;
-        // } else {
-        //     this.boardX += dXdY[0] * relativeDx;
-        // }
-
-        // if (this.boardY + dXdY[1] * relativeDy < this.radius) {
-        //     this.boardY = this.radius / 2;
-        // } else if (this.boardY + dXdY[1] * relativeDy > this.board.boardHeight - this.radius) {
-        //     this.boardY = this.board.boardHeight - this.radius / 2;
-        // } else {
-        //     this.boardY += dXdY[1] * relativeDy;
-        // }
+        this.cursorDistance = Math.sqrt(this.dXdY[0] * this.dXdY[0] + this.dXdY[1] * this.dXdY[1]);
     }
 
 
     move() {
-        debugger
         let nextPos = [];
         
         nextPos[0] = this.boardX + (this.dXdY[0] / this.cursorDistance) * this.speed;
-        nextPos[1] = this.boardY + (this.dXdY[1] / this.cursorDistance) * this.speed;
+        nextPos[1] = this.boardY + (this.dXdY[1] / this.cursorDistance) * this.speed / 1.25;
         
         let relativeX;
         if (nextPos[0] < this.boardX) {
