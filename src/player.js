@@ -67,18 +67,18 @@ class Player {
         };
 
 
-        if (this.boardX + distanceArray[0] * relativeDx < this.radius/2) {
-            this.boardX = this.radius / 2;
+        if (this.boardX + distanceArray[0] * relativeDx < this.radius) {
+            this.boardX = this.radius;
         } else if (this.boardX + (distanceArray[0] * relativeDx) > this.board.boardWidth - this.radius) {
-            this.boardX = this.board.boardWidth - this.radius / 2;
+            this.boardX = this.board.boardWidth - this.radius;
         } else {
             this.boardX += distanceArray[0] * relativeDx;
         }
 
         if (this.boardY + distanceArray[1] * relativeDy < this.radius) {
-            this.boardY = this.radius / 2;
+            this.boardY = this.radius;
         } else if (this.boardY + distanceArray[1] * relativeDy > this.board.boardHeight - this.radius) {
-            this.boardY = this.board.boardHeight - this.radius / 2;
+            this.boardY = this.board.boardHeight - this.radius;
         } else {
             this.boardY += distanceArray[1] * relativeDy;
         }
