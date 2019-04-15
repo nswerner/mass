@@ -48,7 +48,10 @@ class Board {
 
     draw() {
         this.context.strokeStyle = 'black';
-        this.context.strokeRect(0, 0, this.boardWidth, this.boardHeight); 
+        this.context.lineWidth = 3;
+        this.context.rect(0, 0, this.boardWidth, this.boardHeight);
+        this.context.stroke();
+
     }
 }
 

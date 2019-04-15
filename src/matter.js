@@ -33,7 +33,7 @@ class Matter {
 
         if (distance < playerHitbox.radius + matterHitbox.radius) {
             this.consumed = true;
-            //
+            debugger
             object.consumeMatter(this);
             //
             return true;

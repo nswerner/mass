@@ -38,6 +38,7 @@ class Player {
 
     consumeMatter(object) {
         this.radius += object.mass / 1.35;
+        object.mass = 0;
     }
 
 
@@ -68,7 +69,7 @@ class Player {
 
         if (this.boardX + distanceArray[0] * relativeDx < this.radius/2) {
             this.boardX = this.radius / 2;
-        } else if (this.boardX + distanceArray[0] * relativeDx > this.board.boardWidth - this.radius) {
+        } else if (this.boardX + (distanceArray[0] * relativeDx) > this.board.boardWidth - this.radius) {
             this.boardX = this.board.boardWidth - this.radius / 2;
         } else {
             this.boardX += distanceArray[0] * relativeDx;

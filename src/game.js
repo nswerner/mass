@@ -37,7 +37,8 @@ class Game {
     draw() {
         this.fix_dpi();
         this.context.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
-        this.board.draw();
+        // this.board.draw();
+
         this.camera.updatePos();
         this.camera.draw();
 
