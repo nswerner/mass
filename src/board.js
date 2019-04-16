@@ -19,13 +19,13 @@ class Board {
 
         this.matter = [];
         this.createMatter(1000);
-        this.repopulateMatter(3, 5);
+        this.repopulateMatter(100, 5);
 
         this.player = new Player(canvasWidth, canvasHeight, this.context, this.dpi, this);
         
         this.computers = [];
         this.createAI(50);
-        // this.repopulateAI();
+        this.repopulateAI(5, 10);
 
         this.createMatter = this.createMatter.bind(this);
         this.repopulateMatter = this.repopulateMatter.bind(this);
@@ -38,11 +38,11 @@ class Board {
 
     repopulateMatter(n, seconds) {
         setInterval(() => {
-            if (this.matter.length < 8) {
-                this.createMatter(n + 10)
-            } else if (this.matter.length < 20) {
-                this.createMatter(n + 5);
-            } else if (this.matter.length < 40) {
+            if (this.matter.length < 100) {
+                this.createMatter(n + 300)
+            } else if (this.matter.length < 200) {
+                this.createMatter(n + 200);
+            } else if (this.matter.length < 500) {
                 this.createMatter(n);
             }
         }, seconds * 1000);
@@ -56,10 +56,27 @@ class Board {
     }
 
     createAI(n) {
-        for (let idx = 0; idx < n; idx += 1) {
-            let localAI = new AI(this, this.canvasWidth, this.canvasHeight, this.context, this.dpi, COLORS[Math.floor(Math.random() * COLORS.length)]);
+        for (let idx = 0; idx < n - n/5; idx += 1) {
+            let localAI = new AI(this, this.canvasWidth, this.canvasHeight, this.context, this.dpi, COLORS[Math.floor(Math.random() * COLORS.length)], Math.floor((Math.random() + 0.05) * 100));
             this.computers.push(localAI);
         }
+
+        for (let idx = 0; idx < n / 5; idx += 1) {
+            let localAI = new AI(this, this.canvasWidth, this.canvasHeight, this.context, this.dpi, COLORS[Math.floor(Math.random() * COLORS.length)], Math.floor((Math.random() + 0.05) * 300));
+            this.computers.push(localAI);
+        }
+    }
+
+    repopulateAI(n, seconds) {
+        setInterval(() => {
+            if (this.computers.length < 10) {
+                this.createAI(n + 25)
+            } else if (this.computers.length < 25) {
+                this.createAI(n + 15);
+            } else if (this.computers.length < 35) {
+                this.createAI(n);
+            }
+        }, seconds * 1000);
     }
 
     draw() {

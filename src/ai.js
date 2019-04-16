@@ -1,10 +1,11 @@
 const { COLORS } = require("../assets/palette/palette");
 const { game } = require("./mass");
+const Matter = require('./matter');
 
 
 
 class AI {
-    constructor(board, canvasWidth, canvasHeight, context, dpi, color) {
+    constructor(board, canvasWidth, canvasHeight, context, dpi, color, size) {
         this.board = board;
 
         this.boardWidth = board.boardWidth;
@@ -13,17 +14,17 @@ class AI {
         this.canvasHeight = canvasHeight;
         this.canvasWidth = canvasWidth;
 
-        
         this.context = context;
         this.dpi = dpi;
         this.board = board;
         
-        this.boardX = Math.floor(Math.random() * this.board.boardWidth);
-        this.boardY = Math.floor(Math.random() * this.board.boardHeight);
+        this.boardX = Math.floor(Math.random() * (this.board.boardWidth - this.radius));
+        this.boardY = Math.floor(Math.random() * (this.board.boardHeight - this.radius));
         
         this.frameOrigin = [this.boardX - (this.canvasWidth / 2), this.boardY - (this.canvasHeight / 2)];
 
-        this.radius = Math.floor((Math.random() + 0.05) * 300);
+        this.radius = size;
+        this.mass = size;
         this.speed = 5;
 
         this.dXdY = [1, 1];
@@ -40,29 +41,43 @@ class AI {
         
         // this.mouseMoveHandler = this.mouseMoveHandler.bind(this);
         // document.addEventListener("mousemove", this.mouseMoveHandler, false);
+
+
     }
 
     consumeMatter(object) {
-        this.radius += object.mass / 1;
-        object.mass = 0;
+
+        if (object instanceof Matter) {
+            this.radius += object.mass / 1;
+            object.mass = 0;
+        } else { 
+            this.radius += object.mass / 2.5;
+            object.mass = 0;
+        }
     }
 
-    // isCollidedWith(object) {
-    //     var playerHitbox = { radius: object.radius, x: object.boardX, y: object.boardY };
-    //     var matterHitbox = { radius: 5, x: this.boardX, y: this.boardY };
+    isCollidedWith(object) {
+        const objectHitbox = { radius: object.radius, x: object.boardX, y: object.boardY };
+        const thisHitbox = { radius: this.radius, x: this.boardX, y: this.boardY };
 
-    //     var dx = playerHitbox.x - matterHitbox.x;
-    //     var dy = playerHitbox.y - matterHitbox.y;
-    //     var distance = Math.sqrt(dx * dx + dy * dy);
+        const dx = objectHitbox.x - thisHitbox.x;
+        const dy = objectHitbox.y - thisHitbox.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
 
-    //     if (distance < playerHitbox.radius + matterHitbox.radius) {
-    //         this.consumed = true;
-    //         object.consumeMatter(this);
-    //         return true;
-    //     } else {
-    //         return false;
-    //     }
-    // }
+        if (distance < objectHitbox.radius / 2 + thisHitbox.radius) {
+            if (object.radius > this.radius) {
+                this.consumed = true;
+                object.consumeMatter(this);
+                return true;
+            } else {
+                object.consumed = true;
+                this.consumeMatter(object);
+                return true;
+            }
+        } else {
+            return false;
+        }
+    }
 
     // mouseMoveHandler(e) {
     //     let mousePos = [e.clientX * this.dpi, e.clientY * this.dpi];
@@ -179,6 +194,7 @@ class AI {
         this.context.fill();
         // this.move();
     }
+
 
 }
 

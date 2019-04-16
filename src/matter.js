@@ -25,12 +25,12 @@ class Matter {
     }
 
     isCollidedWith(object) {
-        var playerHitbox = { radius: object.radius, x: object.boardX, y: object.boardY };
-        var matterHitbox = { radius: 5, x: this.boardX, y: this.boardY };
+        const playerHitbox = { radius: object.radius, x: object.boardX, y: object.boardY };
+        const matterHitbox = { radius: 5, x: this.boardX, y: this.boardY };
 
-        var dx = playerHitbox.x - matterHitbox.x;
-        var dy = playerHitbox.y - matterHitbox.y;
-        var distance = Math.sqrt(dx * dx + dy * dy);
+        const dx = playerHitbox.x - matterHitbox.x;
+        const dy = playerHitbox.y - matterHitbox.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
 
         if (distance < playerHitbox.radius + matterHitbox.radius) {
             this.consumed = true;

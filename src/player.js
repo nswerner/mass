@@ -1,5 +1,6 @@
 const { COLORS } = require("../assets/palette/palette");
 const { game }  = require("./mass");
+const Matter = require("./matter");
 
 
 
@@ -19,12 +20,7 @@ class Player {
 
         this.radius = 15;
 
-        // this.dx = 0.05;
-        // this.dy = 0.05;
-
-        // this.speed = [this.dx, this.dy];
-
-        this.speed = 5;
+        this.speed = 8;
         this.dXdY = [1, 1];
         this.cursorDistance = 1;
         this.prevMousePos = [1, 1];
@@ -37,12 +33,54 @@ class Player {
         this.mouseMoveHandler = this.mouseMoveHandler.bind(this); 
         this.move = this.move.bind(this);
 
+        this.cheat = this.cheat.bind(this);
+        window.cheat = this.cheat;
+
         document.addEventListener("mousemove", this.mouseMoveHandler, false);
     }
 
+    // CHANGE THIS - SETTING MAX SIZE
     consumeMatter(object) {
-        this.radius += object.mass / 1;
-        object.mass = 0;
+        if (object instanceof Matter) {
+            if (this.radius + object.mass < 600) {
+                this.radius += object.mass / 1;
+                object.mass = 0;
+            } else {
+                null;
+            }
+        } else {
+            if (this.radius + object.mass < 600) {
+                this.radius += object.mass / 2.5;
+                object.mass = 0;
+            } else {
+                null;
+            }
+        }
+
+        
+    }
+
+    isCollidedWith(object) {
+        const objectHitbox = { radius: object.radius, x: object.boardX, y: object.boardY };
+        const thisHitbox = { radius: this.radius, x: this.boardX, y: this.boardY };
+
+        const dx = objectHitbox.x - thisHitbox.x;
+        const dy = objectHitbox.y - thisHitbox.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        if (distance < objectHitbox.radius / 2 + thisHitbox.radius) {
+            if (object.radius > this.radius) {
+                this.consumed = true;
+                object.consumeMatter(this);
+                return true;
+            } else {
+                object.consumed = true;
+                this.consumeMatter(object);
+                return true;
+            }
+        } else {
+            return false;
+        }
     }
 
 
@@ -72,21 +110,35 @@ class Player {
     move() {
         let nextPos = [];
         
-        nextPos[0] = this.boardX + (this.dXdY[0] / this.cursorDistance) * this.speed;
-        nextPos[1] = this.boardY + (this.dXdY[1] / this.cursorDistance) * this.speed / 1.25;
+        nextPos[0] = this.boardX + ( (this.dXdY[0] / this.cursorDistance) * this.speed);
+        nextPos[1] = this.boardY + ( (this.dXdY[1] / this.cursorDistance) * this.speed);
         
         let relativeX;
         if (nextPos[0] < this.boardX) {
-            relativeX = nextPos[0] + (0.025 * this.radius);
+            relativeX = nextPos[0] + (0.005 * this.radius);
+            if (relativeX > this.boardX) {
+                relativeX = this.boardX - (this.dXdY[0] / this.cursorDistance);
+            }
         } else {
-            relativeX = nextPos[0] - (0.025 * this.radius);
+            relativeX = nextPos[0] - (0.005 * this.radius);
+            if (relativeX < this.boardX) {
+                relativeX = this.boardX + (this.dXdY[0] / this.cursorDistance);
+            }
         }
 
         let relativeY;
-        if (nextPos[0] < this.boardY) {
-            relativeY = nextPos[1] + (0.025 * this.radius);
+        if (nextPos[1] < this.boardY) {
+            relativeY = nextPos[1] + (0.005 * this.radius);
+            if (relativeY > this.boardY) {
+                relativeY = this.boardY - (this.dXdY[1] / this.cursorDistance);
+                debugger
+            }
         } else {
-            relativeY = nextPos[1] - (0.025 * this.radius);
+            relativeY = nextPos[1] - (0.005 * this.radius);
+            if (relativeY < this.boardY) {
+                relativeY = this.boardY + (this.dXdY[1] / this.cursorDistance);
+                debugger
+            }
         }
 
 
@@ -128,6 +180,13 @@ class Player {
         this.context.fillStyle = gradient;
         this.context.fill();
         this.move();     
+    }
+
+
+    cheat(n) {
+        this.radius = n;
+        this.mass = n;
+        window.cheat = this.cheat;
     }
 
     

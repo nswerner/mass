@@ -7,14 +7,12 @@ class Camera {
         this.context = context;
         this.dpi = dpi;
 
-        
         this.player = this.board.player;
         this.boardX = this.player.boardX - (this.canvasWidth / 2); 
         this.boardY = this.player.boardY - (this.canvasHeight / 2);
 
         this.matter = [];
         this.allMatter = board.matter;
-        
         
         this.computers = [];
         this.allComputers = board.computers;
@@ -23,6 +21,8 @@ class Camera {
         this.draw = this.draw.bind(this);
         this.within = this.within.bind(this);
         this.drawMatter = this.drawMatter.bind(this);
+        this.drawComputers = this.drawComputers.bind(this);
+        this.drawPlayer = this.drawPlayer.bind(this);
     }
 
     updatePos() {
@@ -54,6 +54,11 @@ class Camera {
         }
     }
 
+    overlap() {
+        // draws the canvas elements in ascending order by radius
+        // ¬ objects with a larger radius are drawn later, and thus on top of objects with a smaller radius
+    }
+
     drawMatter() {
 
         let matter;
@@ -76,14 +81,24 @@ class Camera {
             computer = this.computers[idx];
 
             // computer.isCollidedWith(this.player) === true ||
-            if (computer.consumed === true) {
-                this.computers.splice(idx, 1);
-                idx -= 1;
+            if (computer.isCollidedWith(this.player) === true || computer.consumed === true) {
+                null;
             } else {
                 computer.draw(this.boardX, this.boardY);
             }
         }
 
+    }
+
+    drawPlayer() {
+        
+        
+        if (this.player.consumed) {
+            // CHANGE THIS: create game over modal
+            null;
+        } else {
+            this.player.draw();
+        }
     }
 
     draw() {
@@ -100,7 +115,7 @@ class Camera {
         this.drawComputers();
         
         //draw player
-        this.player.draw();  
+        this.drawPlayer();
 
         // this.board.draw();
         //board draw here actually applies stroke to player???

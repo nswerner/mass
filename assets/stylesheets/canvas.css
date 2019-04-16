@@ -15,5 +15,5 @@ html { overflow: -moz-scrollbars-none; }
 html { -ms-overflow-style: none; }
 
 html {
-    cursor: none;
+    cursor: default;
 }
