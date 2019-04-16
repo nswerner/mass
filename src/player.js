@@ -24,7 +24,6 @@ class Player {
 
         // this.speed = [this.dx, this.dy];
 
-        
         this.speed = 5;
         this.dXdY = [1, 1];
         this.cursorDistance = 1;

@@ -3,12 +3,13 @@ const { Game } = require("./game");
 
 
 class Matter {
-    constructor(boardWidth, boardHeight, canvasWidth, canvasHeight, context, dpi, color, consumed = false) {
+    constructor(board, canvasWidth, canvasHeight, context, dpi, color, consumed = false) {
+        this.board = board;
         this.context = context;
         this.dpi = dpi;
 
-        this.boardWidth = boardWidth;
-        this.boardHeight = boardHeight;
+        this.boardWidth = board.boardWidth;
+        this.boardHeight = board.boardHeight;
 
         this.canvasWidth = canvasWidth;
         this.canvasHeight = canvasHeight;

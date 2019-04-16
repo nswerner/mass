@@ -14,14 +14,15 @@ class Camera {
 
         this.matter = [];
         this.allMatter = board.matter;
+        
+        
         this.computers = [];
+        this.allComputers = board.computers;
 
         this.updatePos = this.updatePos.bind(this);
         this.draw = this.draw.bind(this);
         this.within = this.within.bind(this);
         this.drawMatter = this.drawMatter.bind(this);
-
-        this.within();
     }
 
     updatePos() {
@@ -40,13 +41,20 @@ class Camera {
                 this.matter.push(this.allMatter[idx]);
             }
         }
-        window.cameraMatter = this.matter;
-        window.allMatter = this.allMatter;
-        // include logic to do computers within once they're created
+        
+        this.computers = [];
+        for (let idx = 0; idx < this.allComputers.length; idx += 1) {
+            if (this.allComputers[idx].boardX + this.allComputers[idx].radius < this.boardX || this.allComputers[idx].boardX - this.allComputers[idx].radius > this.boardX + this.canvasWidth) {
+                continue;
+            } else if (this.allComputers[idx].boardY + this.allComputers[idx].radius < this.boardY || this.allComputers[idx].boardY - this.allComputers[idx].radius > this.boardY + this.canvasHeight) {
+                continue;
+            } else {
+                this.computers.push(this.allComputers[idx]);
+            }
+        }
     }
 
     drawMatter() {
-        // this.within();
 
         let matter;
         for (let idx = 0; idx < this.matter.length; idx += 1) {
@@ -61,16 +69,39 @@ class Camera {
         }
     }
 
+    drawComputers() {
+
+        let computer;
+        for (let idx = 0; idx < this.computers.length; idx += 1) {
+            computer = this.computers[idx];
+
+            // computer.isCollidedWith(this.player) === true ||
+            if (computer.consumed === true) {
+                this.computers.splice(idx, 1);
+                idx -= 1;
+            } else {
+                computer.draw(this.boardX, this.boardY);
+            }
+        }
+
+    }
+
     draw() {
+        //grab all objects within frame
         this.within();
 
         //draw board border
         
-        //draw matter
+
+        //draw in-frame matter
         this.drawMatter();
+
+        //draw in-frame computers
+        this.drawComputers();
         
         //draw player
         this.player.draw();  
+
         // this.board.draw();
         //board draw here actually applies stroke to player???
     }

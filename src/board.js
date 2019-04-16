@@ -1,6 +1,7 @@
 const { COLORS } = require('../assets/palette/palette');
 const Matter = require('./matter');
 const Player = require('./player');
+const AI = require('./ai');
 
 
 class Board {
@@ -14,16 +15,24 @@ class Board {
         this.context = context;
         this.dpi = dpi;
 
+        //CHANGE REPOPULATE MATTER AS COMPUTER PLAYERS ARE INTRODUCED
+
         this.matter = [];
-        this.createMatter(500);
+        this.createMatter(1000);
         this.repopulateMatter(3, 5);
 
-        // MAY NEED TO ADD GAME
         this.player = new Player(canvasWidth, canvasHeight, this.context, this.dpi, this);
+        
         this.computers = [];
+        this.createAI(50);
+        // this.repopulateAI();
 
         this.createMatter = this.createMatter.bind(this);
         this.repopulateMatter = this.repopulateMatter.bind(this);
+
+        this.createAI = this.createAI.bind(this);
+        // this.repopulateAI = this.repopulateAI.bind(this);
+        
         this.draw = this.draw.bind(this);
     }
 
@@ -41,8 +50,15 @@ class Board {
 
     createMatter(n) {
         for (let idx = 0; idx < n; idx += 1) {
-            let localMatter = new Matter(this.boardWidth, this.boardHeight, this.canvasWidth, this.canvasHeight, this.context, this.dpi, COLORS[Math.floor(Math.random() * COLORS.length)]);
+            let localMatter = new Matter(this, this.canvasWidth, this.canvasHeight, this.context, this.dpi, COLORS[Math.floor(Math.random() * COLORS.length)]);
             this.matter.push(localMatter);
+        }
+    }
+
+    createAI(n) {
+        for (let idx = 0; idx < n; idx += 1) {
+            let localAI = new AI(this, this.canvasWidth, this.canvasHeight, this.context, this.dpi, COLORS[Math.floor(Math.random() * COLORS.length)]);
+            this.computers.push(localAI);
         }
     }
 
