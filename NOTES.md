@@ -13,3 +13,12 @@
 2) Create Scale
 
 3) Create Enemies
+
+
+
+!!! repopulate AI doesn't work as expected because we're not removing AI from the array, we're just changing their consumed status;
+!!! easy fix: call it more regularly with no conditionals on computers length
+!!! harder fix: splice it from the computers array -> introduced issues with objects not rendering on collision check
+
+
+!!! flesh out the AI movement

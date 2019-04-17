@@ -199,8 +199,8 @@ class AI {
     }
 
     // passed an individual object one at a time from a sorted set of data so that closest objects are assessed first
-    threatened(object) {
-        if (object.mass > this.mass && this.calculateDistance(object) <= 250) {
+    stillThreatened(object) {
+        if (object.mass > this.mass && this.calculateDistance(object) < 600) {
             return true;
         } else {
             return false;
@@ -222,6 +222,7 @@ class AI {
 
 
     decideMove() {
+
         let nearby = this.nearby();
         let threats;
         let targets;
@@ -231,7 +232,7 @@ class AI {
         for (let idx = 0; idx < nearestThreats.length; idx += 1) {
             const threat = nearestThreats[idx];
             if (threat.mass > this.mass && this.calculateDistance(threat) < 600) {
-                debugger
+                this.threat = threat;
                 this.dx = threat.boardX + threat.radius - this.boardX + this.radius;
                 this.dy = threat.boardY + threat.radius - this.boardY + this.radius;
                 this.threatDistance = Math.sqrt(this.dx * this.dx + this.dy * this.dy);
@@ -240,16 +241,30 @@ class AI {
                 this.nextPos[0] = this.boardX - ((this.dx / this.threatDistance) * this.speed);
                 this.nextPos[1] = this.boardY - ((this.dy / this.threatDistance) * this.speed);
                 this.threatened = true;
-                break;
+                return;
+
+                // while (this.threatened === true) {
+                //     debugger
+                //     this.move(this.nextPos, this.dx, this.dy, this.threatDistance);
+                //     if (this.calculateDistance(threat) > 400) {
+                //         this.threatened = false;
+                //         this.decideMove();
+                //     }
+                // }
+                
+                //while (still Threatened )... avoid this single enemy  (should eliminate bug where AI spazzes out over two nearby enemies)
             }
 
         }
 
-        if (this.threatened === true) {
-            debugger
-            this.move(this.nextPos, this.dx, this.dy, this.threatDistance);
-        }
-       
+        // while (this.threatened === true) {
+        //     debugger
+            
+        //     if (this.calculateDistance(this.threat) > 200) {
+        //         this.threatened = false;
+        //         this.decideMove();
+        //     }
+        // }
     }
 
     move(nextPos, dx, dy, distance) {
@@ -315,6 +330,7 @@ class AI {
         this.context.fillStyle = this.color;
         this.context.fill();
         this.decideMove();
+        this.move(this.nextPos, this.dx, this.dy, this.threatDistance);
     }
 
 
