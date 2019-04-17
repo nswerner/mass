@@ -18,13 +18,15 @@ class Matter {
         this.boardY = Math.floor(Math.random() * this.boardHeight);
 
         this.mass = 1;
+        this.radius = 5;
 
         this.consumed = false;
         this.color = color;
         this.draw = this.draw.bind(this);
+        this.hasCollidedWith = this.hasCollidedWith.bind(this);
     }
 
-    isCollidedWith(object) {
+    hasCollidedWith(object) {
         const playerHitbox = { radius: object.radius, x: object.boardX, y: object.boardY };
         const matterHitbox = { radius: 5, x: this.boardX, y: this.boardY };
 
@@ -32,9 +34,7 @@ class Matter {
         const dy = playerHitbox.y - matterHitbox.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
 
-        if (distance < playerHitbox.radius + matterHitbox.radius) {
-            this.consumed = true;
-            object.consumeMatter(this);
+        if (distance < playerHitbox.radius / 2 + matterHitbox.radius) {
             return true;
         } else {
             return false;

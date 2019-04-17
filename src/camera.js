@@ -23,6 +23,7 @@ class Camera {
         this.drawMatter = this.drawMatter.bind(this);
         this.drawComputers = this.drawComputers.bind(this);
         this.drawPlayer = this.drawPlayer.bind(this);
+        this.drawBoard = this.drawBoard.bind(this);
     }
 
     updatePos() {
@@ -30,6 +31,7 @@ class Camera {
         this.boardY = this.player.boardY - (this.canvasHeight / 2);
     }
 
+    // also check for consumed before inclusion
     within() {
         this.matter = [];
         for (let idx = 0; idx < this.allMatter.length; idx += 1) {
@@ -37,7 +39,7 @@ class Camera {
                 continue;   
             } else if (this.allMatter[idx].boardY < this.boardY || this.allMatter[idx].boardY > this.boardY + this.canvasHeight) {
                 continue;
-            } else {
+            } else if (this.allMatter[idx].consumed === false) {
                 this.matter.push(this.allMatter[idx]);
             }
         }
@@ -48,8 +50,53 @@ class Camera {
                 continue;
             } else if (this.allComputers[idx].boardY + this.allComputers[idx].radius < this.boardY || this.allComputers[idx].boardY - this.allComputers[idx].radius > this.boardY + this.canvasHeight) {
                 continue;
-            } else {
+            } else if (this.allComputers[idx].consumed === false) {
                 this.computers.push(this.allComputers[idx]);
+            }
+        }
+    }
+
+    checkCollisions() {
+
+        // check matter collisions
+        for (let idx = 0; idx < this.matter.length; idx += 1) {
+            let matter = this.matter[idx];
+
+            if (matter.hasCollidedWith(this.player)) {
+                this.player.hasConsumedObject(matter);
+            }
+
+            for (let idx2 = 0; idx2 < this.computers.length; idx2 += 1) {
+                let computer = this.computers[idx2];
+                if (computer.hasCollidedWith(matter)) {
+                    computer.hasConsumedObject(matter);
+                }
+            }
+        }
+
+        // check computer collisions
+        for (let idx = 0; idx < this.computers.length; idx += 1) {
+            let computer = this.computers[idx];
+
+            if (computer.hasCollidedWith(this.player)) {
+                if (computer.hasBeenConsumedBy(this.player)) {
+                    null;
+                } else {
+                    computer.hasConsumedObject(this.player);
+                }
+            }
+
+            for (let idx2 = idx + 1; idx2 < this.computers.length - 1; idx2 += 1) {
+                let computer2 = this.computers[idx2];
+
+                if (computer.hasCollidedWith(computer2)) {
+
+                    if (computer.hasBeenConsumedBy(computer2)) {
+                        null;
+                    } else {
+                        computer.hasConsumedObject(computer2);
+                    }
+                }
             }
         }
     }
@@ -60,40 +107,65 @@ class Camera {
     }
 
     drawMatter() {
+        
+                for (let idx = 0; idx < this.matter.length; idx += 1) {
+                    if (this.matter[idx].consumed === false) {
+                        this.matter[idx].draw(this.boardX, this.boardY);
+                    }
+                }
 
-        let matter;
-        for (let idx = 0; idx < this.matter.length; idx += 1) {
-            matter = this.matter[idx];
+        // let matter;
+        // for (let idx = 0; idx < this.matter.length; idx += 1) {
+        //     matter = this.matter[idx];
 
-            if (matter.isCollidedWith(this.player) === true || matter.consumed === true) {
-                this.matter.splice(idx, 1);
-                idx -= 1;
-            } else {
-                matter.draw(this.boardX, this.boardY);
-            }
-        }
+        //     if (matter.isCollidedWith(this.player) === true || matter.consumed === true) {
+        //         null;
+        //     } else {
+        //         matter.draw(this.boardX, this.boardY);
+        //     }
+        // }
     }
 
     drawComputers() {
 
-        let computer;
         for (let idx = 0; idx < this.computers.length; idx += 1) {
-            computer = this.computers[idx];
-
-            // computer.isCollidedWith(this.player) === true ||
-            if (computer.isCollidedWith(this.player) === true || computer.consumed === true) {
-                null;
-            } else {
-                computer.draw(this.boardX, this.boardY);
+            
+            if (this.computers[idx].consumed === false) {
+                this.computers[idx].draw(this.boardX, this.boardY);
             }
         }
 
+        // for (let idx = 0; idx < this.computers.length; idx += 1) {
+        //     const computer = this.computers[idx];
+
+        //     if (computer.consumed === true || computer.isCollidedWith(this.player) === true) {
+        //         computer.consumed = true;
+        //     } else {
+        //         computer.draw(this.boardX, this.boardY);
+        //     }
+
+        //     for (let idx2 = idx + 1; idx2 < this.computers.length; idx2 += 1) {
+        //         const computer2 = this.computers[idx2];
+
+        //         if (computer2.consumed === true || computer.isCollidedWith(computer2) === true) {
+        //             computer.consumed = true;
+        //         } else {
+        //             computer2.draw(this.boardX, this.boardY);  
+        //         }
+        //     }
+
+        // }
+
     }
+
+    drawBoard() {
+        this.board.draw();
+    }
+
 
     drawPlayer() {
         
-        
-        if (this.player.consumed) {
+        if (this.player.consumed === true) {
             // CHANGE THIS: create game over modal
             null;
         } else {
@@ -102,12 +174,18 @@ class Camera {
     }
 
     draw() {
+        debugger
         //grab all objects within frame
         this.within();
 
-        //draw board border
-        
+        // NEW
+        this.checkCollisions();
 
+        this.within();
+
+        //draw board border
+        // this.drawBoard();
+        
         //draw in-frame matter
         this.drawMatter();
 
@@ -116,7 +194,7 @@ class Camera {
         
         //draw player
         this.drawPlayer();
-
+        
         // this.board.draw();
         //board draw here actually applies stroke to player???
     }

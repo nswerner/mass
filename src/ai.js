@@ -21,13 +21,17 @@ class AI {
         this.boardX = Math.floor(Math.random() * (this.board.boardWidth));
         this.boardY = Math.floor(Math.random() * (this.board.boardHeight));
 
-        this.nextPos = [];
+        this.nextPos = [this.boardX - 1, this.boardY - 1];
+        this.dx = 1;
+        this.dy = 1;
+        this.targetDistance = 1000;
+        this.threatDistance = 500;
         
         this.frameOrigin = [this.boardX - (this.canvasWidth / 2), this.boardY - (this.canvasHeight / 2)];
 
         if (size < 35) {
             this.radius = Math.floor(Math.random() * 10) + 25;
-            this.mass = Math.floor(Math.random() * 10) + 25;
+            this.mass = this.radius;
         } else {
             this.radius = size;
             this.mass = size;
@@ -35,128 +39,111 @@ class AI {
 
         this.speed = 5;
 
-        // this.prevMousePos = [1, 1];
-        // this.cursorDistance = 1;
-
         this.consumed = false;
 
         this.color = color;
 
         this.draw = this.draw.bind(this);
-        // this.move = this.move.bind(this);
+        this.decideMove = this.decideMove.bind(this);
+        this.move = this.move.bind(this);
+
         this.nearby = this.nearby.bind(this);
+        this.sortNearbyPlayers = this.sortNearbyPlayers.bind(this);
+        this.sortNearbyMatter = this.sortNearbyMatter.bind(this);
         this.calculateDistance = this.calculateDistance.bind(this);
-        
-        // this.mouseMoveHandler = this.mouseMoveHandler.bind(this);
-        // document.addEventListener("mousemove", this.mouseMoveHandler, false);
 
+        // this.isCollidedWith = this.isCollidedWith.bind(this);
+        // this.consumeMatter = this.consumeMatter.bind(this);
 
+        this.hasCollidedWith = this.hasCollidedWith.bind(this);
+        this.hasBeenConsumedBy = this.hasBeenConsumedBy.bind(this);
+        this.hasConsumedObject = this.hasConsumedObject.bind(this);
+        this.consumeMatter = this.consumeMatter.bind(this);
     }
 
     consumeMatter(object) {
 
         if (object instanceof Matter) {
-            this.radius += object.mass / 1;
-            object.mass = 0;
-        } else { 
-            this.radius += object.mass / 2.5;
-            object.mass = 0;
+            if (this.radius + object.mass < 600) {
+                this.mass += object.mass;
+                this.radius += object.mass;
+                object.mass = 0;
+                object.consumed = true;
+            } 
+        } else {
+            if (this.radius + object.mass < 600) {
+                this.mass += object.mass / 3;
+                this.radius += object.mass / 3;
+                object.mass = 0;
+                object.consumed = true;
+            }
         }
     }
 
-    isCollidedWith(object) {
-        const objectHitbox = { radius: object.radius, x: object.boardX, y: object.boardY };
+    hasCollidedWith(object) {
         const thisHitbox = { radius: this.radius, x: this.boardX, y: this.boardY };
+        const objectHitbox = { radius: object.radius, x: object.boardX, y: object.boardY };
 
         const dx = objectHitbox.x - thisHitbox.x;
         const dy = objectHitbox.y - thisHitbox.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
 
-        if (distance < objectHitbox.radius / 2 + thisHitbox.radius) {
-            if (object.radius > this.radius) {
-                this.consumed = true;
-                object.consumeMatter(this);
-                return true;
-            } else {
-                object.consumed = true;
-                this.consumeMatter(object);
-                return false;
-            }
+        if (distance < objectHitbox.radius / 2 + thisHitbox.radius / 2) {
+            return true;
         } else {
             return false;
         }
     }
 
-    // mouseMoveHandler(e) {
-    //     let mousePos = [e.clientX * this.dpi, e.clientY * this.dpi];
-    //     let canvasMiddle = [this.canvasWidth / 2, this.canvasHeight / 2];
+    hasBeenConsumedBy(object) {
+        if (object.radius > this.radius) {
+            object.consumeMatter(this);
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-    //     let xDistance;
-    //     let yDistance;
+    hasConsumedObject(object) {
+        if (this.radius > object.radius) {
+            this.consumeMatter(object);
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-    //     this.dXdY = [xDistance, yDistance];
+    // isCollidedWith(object) {
+    //     const objectHitbox = { radius: object.radius, x: object.boardX, y: object.boardY };
+    //     const thisHitbox = { radius: this.radius, x: this.boardX, y: this.boardY };
 
-    //     // for (let idx = 0; idx < 2; idx += 1) {
-    //     //     this.dXdY[idx] = mousePos[idx] - this.prevMousePos[idx];
-    //     // }
+    //     const dx = objectHitbox.x - thisHitbox.x;
+    //     const dy = objectHitbox.y - thisHitbox.y;
+    //     const distance = Math.sqrt(dx * dx + dy * dy);
 
-    //     for (let idx = 0; idx < 2; idx += 1) {
-    //         this.dXdY[idx] = mousePos[idx] - canvasMiddle[idx];
-    //     }
-
-    //     this.cursorDistance = Math.sqrt(this.dXdY[0] * this.dXdY[0] + this.dXdY[1] * this.dXdY[1]);
-    //     this.prevMousePos[0] = mousePos[0];
-    //     this.prevMousePos[1] = mousePos[1];
-    // }
-
-
-    // move() {
-
-    //     let nextPos = [];
-
-    //     nextPos[0] = this.boardX + (this.dXdY[0] / this.cursorDistance) * this.speed;
-    //     nextPos[1] = this.boardY + (this.dXdY[1] / this.cursorDistance) * this.speed / 1.25;
-
-    //     let relativeX;
-    //     if (nextPos[0] < this.boardX) {
-    //         relativeX = nextPos[0] + (0.025 * this.radius);
+    //     if (distance < (objectHitbox.radius / 2) + thisHitbox.radius) {
+    //         if (object.radius > this.radius) {
+    //             object.consumeMatter(this);
+    //             return true;
+    //         } else {
+    //             this.consumeMatter(object);
+    //             return false;
+    //         }
     //     } else {
-    //         relativeX = nextPos[0] - (0.025 * this.radius);
-    //     }
-
-    //     let relativeY;
-    //     if (nextPos[0] < this.boardY) {
-    //         relativeY = nextPos[1] + (0.025 * this.radius);
-    //     } else {
-    //         relativeY = nextPos[1] - (0.025 * this.radius);
-    //     }
-
-
-
-    //     if (relativeX < this.radius) {
-    //         this.boardX = this.radius;
-    //     } else if (relativeX > this.board.boardWidth - this.radius) {
-    //         this.boardX = this.board.boardWidth - this.radius;
-    //     } else {
-    //         this.boardX = relativeX;
-    //     }
-
-    //     if (relativeY < this.radius) {
-    //         this.boardY = this.radius;
-    //     } else if (relativeY > this.board.boardHeight - this.radius) {
-    //         this.boardY = this.board.boardHeight - this.radius;
-    //     } else {
-    //         this.boardY = relativeY;
+    //         return false;
     //     }
     // }
 
     calculateDistance(object) {
-        const dx = object.boardX + object.radius - this.boardX + this.radius;
-        const dy = object.boardY + object.radius - this.boardY + this.radius;
+        const thisHitbox = { radius: this.radius, x: this.boardX, y: this.boardY };
+        const objectHitbox = { radius: object.radius, x: object.boardX, y: object.boardY };
 
-        return Math.sqrt(dx * dx + dy * dy);
+        const dx = objectHitbox.x - thisHitbox.x;
+        const dy = objectHitbox.y - thisHitbox.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        return distance - objectHitbox.radius / 2 - thisHitbox.radius / 2 
     }
-
 
     nearby() {
         const nearMatter = {};
@@ -164,7 +151,7 @@ class AI {
         const nearPlayer = {};
 
         for (let idx = 0; idx < this.board.matter.length; idx += 1) {
-            let matter = this.board.matter[idx];
+            const matter = this.board.matter[idx];
             if (matter.boardX < this.frameOrigin[0] || matter.boardX > this.frameOrigin[0] + this.canvasWidth) {
                 continue;
             } else if (matter.boardY < this.frameOrigin[1] || matter.boardY > this.frameOrigin[1] + this.canvasHeight) {
@@ -175,20 +162,21 @@ class AI {
         }
 
         for (let idx = 0; idx < this.board.computers.length; idx += 1) {
-            let computer = this.board.computers[idx];
-            if (computer.boardX < this.frameOrigin[0] || computer.boardX > this.frameOrigin[0] + this.canvasWidth) {
+            const computer = this.board.computers[idx];
+            if (computer.boardX + computer.radius < this.frameOrigin[0] || computer.boardX + computer.radius > this.frameOrigin[0] + this.canvasWidth) {
                 continue;
-            } else if (computer.boardY < this.frameOrigin[1] || computer.boardY > this.frameOrigin[1] + this.canvasHeight) {
+            } else if (computer.boardY + computer.radius < this.frameOrigin[1] || computer.boardY + computer.radius > this.frameOrigin[1] + this.canvasHeight) {
                 continue;
             } else {
                 nearComputers[this.calculateDistance(computer)] = computer;
             }
         }
+        delete nearComputers["0"];
 
         let player = this.board.player;
-        if (player.boardX < this.frameOrigin[0] || player.boardX > this.frameOrigin[0] + this.canvasWidth) {
+        if (player.boardX + player.radius < this.frameOrigin[0] || player.boardX + player.radius > this.frameOrigin[0] + this.canvasWidth) {
             null;
-        } else if (player.boardY < this.frameOrigin[1] || player.boardY > this.frameOrigin[1] + this.canvasHeight) {
+        } else if (player.boardY + player.radius < this.frameOrigin[1] || player.boardY + player.radius > this.frameOrigin[1] + this.canvasHeight) {
             null;
         } else {
             nearPlayer[this.calculateDistance(player)] = player;
@@ -198,16 +186,19 @@ class AI {
         return nearbyObjects = Object.assign(nearbyObjects, {nearPlayer}, {nearComputers}, {nearMatter});
     }
 
-    // passed an individual object one at a time from a sorted set of data so that closest objects are assessed first
-    stillThreatened(object) {
-        if (object.mass > this.mass && this.calculateDistance(object) < 600) {
-            return true;
-        } else {
-            return false;
-        }
-    }
 
-    sortNearbyThreats(nearbyObjects) {
+
+    // // passed an individual object one at a time from a sorted set of data so that closest objects are assessed first
+    // stillThreatened(object) {
+    //     if (object.mass > this.mass && this.calculateDistance(object) < 600) {
+    //         return true;
+    //     } else {
+    //         return false;
+    //     }
+    // }
+
+
+    sortNearbyPlayers(nearbyObjects) {
         const nearbyThreats = Object.assign({}, nearbyObjects.nearPlayer, nearbyObjects.nearComputers);
         const allDistances = Object.keys(nearbyThreats);
         const sortedDistances = allDistances.sort(function (a, b) { return a - b });
@@ -220,58 +211,98 @@ class AI {
     }
 
 
+    sortNearbyMatter(nearbyObjects) {
+        const nearbyMatter = Object.keys(nearbyObjects.nearMatter);
+        const sortedDistances = nearbyMatter.sort(function (a, b) { return a - b });
+        const sortedMatterByDistance = [];
+        for (let idx = 0; idx < sortedDistances.length; idx += 1) {
+            sortedMatterByDistance.push(nearbyObjects.nearMatter[sortedDistances[idx]]);
+        }
+
+        return sortedMatterByDistance;
+    }
+
 
     decideMove() {
 
-        let nearby = this.nearby();
-        let threats;
-        let targets;
-
-        let nearestThreats = this.sortNearbyThreats(nearby);
+        const nearby = this.nearby();
+        const self = this;
+        const nearestPlayers = this.sortNearbyPlayers(nearby);
         
-        for (let idx = 0; idx < nearestThreats.length; idx += 1) {
-            const threat = nearestThreats[idx];
-            if (threat.mass > this.mass && this.calculateDistance(threat) < 600) {
-                this.threat = threat;
-                this.dx = threat.boardX + threat.radius - this.boardX + this.radius;
-                this.dy = threat.boardY + threat.radius - this.boardY + this.radius;
-                this.threatDistance = Math.sqrt(this.dx * this.dx + this.dy * this.dy);
+        //threat loop
+        for (let idx = 0; idx < nearestPlayers.length; idx += 1) {
+            const threat = nearestPlayers[idx];
 
+            if ((threat.mass > self.mass) && self.calculateDistance(threat) < 600) {
+    
+                self.threatened = true;
+                self.threat = threat;
 
-                this.nextPos[0] = this.boardX - ((this.dx / this.threatDistance) * this.speed);
-                this.nextPos[1] = this.boardY - ((this.dy / this.threatDistance) * this.speed);
-                this.threatened = true;
+                self.dx = threat.boardX + threat.radius - self.boardX + self.radius;
+                self.dy = threat.boardY + threat.radius - self.boardY + self.radius;
+                self.threatDistance = Math.sqrt(self.dx * self.dx + self.dy * self.dy);
+
+                // do I need to account for radius here?
+                self.nextPos[0] = self.boardX - ((self.dx / self.threatDistance) * self.speed);
+                self.nextPos[1] = self.boardY - ((self.dy / self.threatDistance) * self.speed);
                 return;
-
-                // while (this.threatened === true) {
-                //     debugger
-                //     this.move(this.nextPos, this.dx, this.dy, this.threatDistance);
-                //     if (this.calculateDistance(threat) > 400) {
-                //         this.threatened = false;
-                //         this.decideMove();
-                //     }
-                // }
-                
-                //while (still Threatened )... avoid this single enemy  (should eliminate bug where AI spazzes out over two nearby enemies)
             }
+        } 
+        
+        //target loop
+        for (let idx = 0; idx < nearestPlayers.length; idx += 1) {
 
+            this.threatened = false;
+            this.threat = null;
+
+            const target = nearestPlayers[idx];
+            if (target.mass < self.mass && self.calculateDistance(target) < 2000) {
+    
+                self.target = target;
+
+                self.dx = target.boardX + target.radius - self.boardX + self.radius;
+                self.dy = target.boardY + target.radius - self.boardY + self.radius;
+                self.targetDistance = Math.sqrt(self.dx * self.dx + self.dy * self.dy);
+
+                // do I need to account for radius here?
+                self.nextPos[0] = self.boardX - ((self.dx / self.targetDistance) * self.speed);
+                self.nextPos[1] = self.boardY - ((self.dy / self.targetDistance) * self.speed);
+                return;
+            }   
         }
 
-        // while (this.threatened === true) {
-        //     debugger
-            
-        //     if (this.calculateDistance(this.threat) > 200) {
-        //         this.threatened = false;
-        //         this.decideMove();
-        //     }
-        // }
+        // matter loop
+        const nearestMatter = this.sortNearbyMatter(nearby);
+        for (let idx = 0; idx < nearestMatter.length; idx += 1) {
+
+
+            const target = nearestMatter[idx];
+            if (self.calculateDistance(target) < self.canvasHeight * self.canvasWidth) {
+    
+                self.target = target;
+
+                self.dx = target.boardX + target.radius - self.boardX + self.radius;
+                self.dy = target.boardY + target.radius - self.boardY + self.radius;
+                self.targetDistance = Math.sqrt(self.dx * self.dx + self.dy * self.dy);
+
+                // do I need to account for radius here?
+                self.nextPos[0] = self.boardX - ((self.dx / self.targetDistance) * self.speed);
+                self.nextPos[1] = self.boardY - ((self.dy / self.targetDistance) * self.speed);
+                return;
+            }
+        }
+
+
     }
 
     move(nextPos, dx, dy, distance) {
-        debugger
         let relativeX;
+        // if moving left
         if (nextPos[0] < this.boardX) {
+            // x differential would be (nPos - this.pos) = (-), so add to relativeXpos by the portion of the radius
             relativeX = nextPos[0] + (0.005 * this.radius);
+            
+            // if adding that portion ends up making relativeX greater than the current pos, set relative X to the smallest possible movement in the desired direction
             if (relativeX > this.boardX) {
                 relativeX = this.boardX - (dx / distance);
             }
@@ -297,25 +328,22 @@ class AI {
 
 
 
-        if (relativeX < this.radius) {
+        if (relativeX <= this.radius) {
             this.boardX = this.radius;
-        } else if (relativeX > this.board.boardWidth - this.radius) {
+        } else if (relativeX >= this.board.boardWidth - this.radius) {
             this.boardX = this.board.boardWidth - this.radius;
         } else {
             this.boardX = relativeX;
         }
 
-        if (relativeY < this.radius) {
+        if (relativeY <= this.radius) {
             this.boardY = this.radius;
-        } else if (relativeY > this.board.boardHeight - this.radius) {
+        } else if (relativeY >= this.board.boardHeight - this.radius) {
             this.boardY = this.board.boardHeight - this.radius;
         } else {
             this.boardY = relativeY;
         }
     }
-
-
-
 
 
 
@@ -329,8 +357,14 @@ class AI {
 
         this.context.fillStyle = this.color;
         this.context.fill();
+
         this.decideMove();
-        this.move(this.nextPos, this.dx, this.dy, this.threatDistance);
+
+        if (this.threatened === true) {
+            this.move(this.nextPos, this.dx, this.dy, this.threatDistance);
+        } else {
+            this.move(this.nextPos, this.dx, this.dy, this.targetDistance);
+        }
     }
 
 

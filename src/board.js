@@ -18,14 +18,14 @@ class Board {
         //CHANGE REPOPULATE MATTER AS COMPUTER PLAYERS ARE INTRODUCED
 
         this.matter = [];
-        this.createMatter(1000);
-        this.repopulateMatter(100, 5);
+        this.createMatter(25);
+        // this.repopulateMatter(100, 5);
 
         this.player = new Player(canvasWidth, canvasHeight, this.context, this.dpi, this);
         
         this.computers = [];
-        this.createAI(50);
-        this.repopulateAI(5, 10);
+        this.createAI(25);
+        this.repopulateAI(5, 8);
 
         this.createMatter = this.createMatter.bind(this);
         this.repopulateMatter = this.repopulateMatter.bind(this);
@@ -68,15 +68,7 @@ class Board {
     }
 
     repopulateAI(n, seconds) {
-        setInterval(() => {
-            if (this.computers.length < 10) {
-                this.createAI(n + 25)
-            } else if (this.computers.length < 25) {
-                this.createAI(n + 15);
-            } else if (this.computers.length < 35) {
-                this.createAI(n);
-            }
-        }, seconds * 1000);
+        setInterval(() => this.createAI(n), seconds * 1000);
     }
 
     draw() {

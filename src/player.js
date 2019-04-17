@@ -19,6 +19,7 @@ class Player {
         this.boardY = Math.floor(Math.random() * this.board.boardHeight);
 
         this.radius = 15;
+        this.mass = 15;
 
         this.speed = 8;
         this.dXdY = [1, 1];
@@ -26,32 +27,41 @@ class Player {
         this.prevMousePos = [1, 1];
 
         this.consumed = false;
+
         this.color = COLORS[Math.floor(Math.random() * COLORS.length)];
         this.color2 = COLORS[Math.floor(Math.random() * COLORS.length)];
 
         this.draw = this.draw.bind(this);
         this.mouseMoveHandler = this.mouseMoveHandler.bind(this); 
         this.move = this.move.bind(this);
+        document.addEventListener("mousemove", this.mouseMoveHandler, false);
+
+        this.consumeMatter = this.consumeMatter.bind(this);
+        this.hasCollidedWith = this.hasCollidedWith.bind(this);
+        this.hasBeenConsumedBy = this.hasBeenConsumedBy.bind(this);
+        this.hasConsumedObject = this.hasConsumedObject.bind(this);
 
         this.cheat = this.cheat.bind(this);
         window.cheat = this.cheat;
-
-        document.addEventListener("mousemove", this.mouseMoveHandler, false);
     }
 
     // CHANGE THIS - SETTING MAX SIZE
     consumeMatter(object) {
         if (object instanceof Matter) {
             if (this.radius + object.mass < 600) {
-                this.radius += object.mass / 1;
+                this.mass += object.mass;
+                this.radius += object.mass;
                 object.mass = 0;
+                object.consumed = true;
             } else {
                 null;
             }
         } else {
             if (this.radius + object.mass < 600) {
-                this.radius += object.mass / 2.5;
+                this.mass += object.mass / 3;
+                this.radius += object.mass / 3;
                 object.mass = 0;
+                object.consumed = true;
             } else {
                 null;
             }
@@ -60,7 +70,31 @@ class Player {
         
     }
 
-    isCollidedWith(object) {
+    // isCollidedWith(object) {
+    //     const objectHitbox = { radius: object.radius, x: object.boardX, y: object.boardY };
+    //     const thisHitbox = { radius: this.radius, x: this.boardX, y: this.boardY };
+
+    //     const dx = objectHitbox.x - thisHitbox.x;
+    //     const dy = objectHitbox.y - thisHitbox.y;
+    //     const distance = Math.sqrt(dx * dx + dy * dy);
+
+    //     if (distance < objectHitbox.radius / 2 + thisHitbox.radius) {
+    //         if (object.radius > this.radius) {
+    //             this.consumed = true;
+    //             object.consumeMatter(this);
+    //             return true;
+    //         } else {
+    //             object.consumed = true;
+    //             this.consumeMatter(object);
+    //             return false;
+    //         }
+    //     } else {
+    //         return false;
+    //     }
+    // }
+
+
+    hasCollidedWith(object) {
         const objectHitbox = { radius: object.radius, x: object.boardX, y: object.boardY };
         const thisHitbox = { radius: this.radius, x: this.boardX, y: this.boardY };
 
@@ -68,20 +102,33 @@ class Player {
         const dy = objectHitbox.y - thisHitbox.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
 
-        if (distance < objectHitbox.radius / 2 + thisHitbox.radius) {
-            if (object.radius > this.radius) {
-                this.consumed = true;
-                object.consumeMatter(this);
-                return true;
-            } else {
-                object.consumed = true;
-                this.consumeMatter(object);
-                return true;
-            }
+        if (distance < objectHitbox.radius / 2 + thisHitbox.radius / 2) {
+            return true;
         } else {
             return false;
         }
     }
+
+    hasBeenConsumedBy(object) {
+        if (object.radius > this.radius) {
+            object.consumeMatter(this);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    hasConsumedObject(object) {
+        if (this.radius > object.radius) {
+            this.consumeMatter(object);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+    ///// Movement /////
 
 
     mouseMoveHandler(e) {
@@ -181,13 +228,15 @@ class Player {
     }
 
 
+    //// Testing ////
+
+
     cheat(n) {
         this.radius = n;
         this.mass = n;
         window.cheat = this.cheat;
     }
 
-    
 }
 
 module.exports = Player;
