@@ -31,7 +31,6 @@ class Camera {
         this.boardY = this.player.boardY - (this.canvasHeight / 2);
     }
 
-    // also check for consumed before inclusion
     within() {
         this.matter = [];
         for (let idx = 0; idx < this.allMatter.length; idx += 1) {
@@ -101,61 +100,22 @@ class Camera {
         }
     }
 
-    overlap() {
-        // draws the canvas elements in ascending order by radius
-        // ¬ objects with a larger radius are drawn later, and thus on top of objects with a smaller radius
-    }
-
     drawMatter() {
         
-                for (let idx = 0; idx < this.matter.length; idx += 1) {
-                    if (this.matter[idx].consumed === false) {
-                        this.matter[idx].draw(this.boardX, this.boardY);
-                    }
-                }
-
-        // let matter;
-        // for (let idx = 0; idx < this.matter.length; idx += 1) {
-        //     matter = this.matter[idx];
-
-        //     if (matter.isCollidedWith(this.player) === true || matter.consumed === true) {
-        //         null;
-        //     } else {
-        //         matter.draw(this.boardX, this.boardY);
-        //     }
-        // }
+        for (let idx = 0; idx < this.matter.length; idx += 1) {
+            if (this.matter[idx].consumed === false) {
+                this.matter[idx].draw(this.boardX, this.boardY);
+            }
+        }
     }
 
     drawComputers() {
-
         for (let idx = 0; idx < this.computers.length; idx += 1) {
             
             if (this.computers[idx].consumed === false) {
                 this.computers[idx].draw(this.boardX, this.boardY);
             }
         }
-
-        // for (let idx = 0; idx < this.computers.length; idx += 1) {
-        //     const computer = this.computers[idx];
-
-        //     if (computer.consumed === true || computer.isCollidedWith(this.player) === true) {
-        //         computer.consumed = true;
-        //     } else {
-        //         computer.draw(this.boardX, this.boardY);
-        //     }
-
-        //     for (let idx2 = idx + 1; idx2 < this.computers.length; idx2 += 1) {
-        //         const computer2 = this.computers[idx2];
-
-        //         if (computer2.consumed === true || computer.isCollidedWith(computer2) === true) {
-        //             computer.consumed = true;
-        //         } else {
-        //             computer2.draw(this.boardX, this.boardY);  
-        //         }
-        //     }
-
-        // }
-
     }
 
     drawBoard() {
@@ -174,7 +134,6 @@ class Camera {
     }
 
     draw() {
-        debugger
         //grab all objects within frame
         this.within();
 
@@ -191,7 +150,7 @@ class Camera {
 
         //draw in-frame computers
         this.drawComputers();
-        
+
         //draw player
         this.drawPlayer();
         

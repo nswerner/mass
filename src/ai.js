@@ -52,9 +52,6 @@ class AI {
         this.sortNearbyMatter = this.sortNearbyMatter.bind(this);
         this.calculateDistance = this.calculateDistance.bind(this);
 
-        // this.isCollidedWith = this.isCollidedWith.bind(this);
-        // this.consumeMatter = this.consumeMatter.bind(this);
-
         this.hasCollidedWith = this.hasCollidedWith.bind(this);
         this.hasBeenConsumedBy = this.hasBeenConsumedBy.bind(this);
         this.hasConsumedObject = this.hasConsumedObject.bind(this);
@@ -142,7 +139,7 @@ class AI {
         const dy = objectHitbox.y - thisHitbox.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
 
-        return distance - objectHitbox.radius / 2 - thisHitbox.radius / 2 
+        return distance - objectHitbox.radius - thisHitbox.radius;
     }
 
     nearby() {
@@ -171,7 +168,7 @@ class AI {
                 nearComputers[this.calculateDistance(computer)] = computer;
             }
         }
-        delete nearComputers["0"];
+        delete nearComputers[`-${this.radius * 2}`];
 
         let player = this.board.player;
         if (player.boardX + player.radius < this.frameOrigin[0] || player.boardX + player.radius > this.frameOrigin[0] + this.canvasWidth) {
@@ -232,9 +229,11 @@ class AI {
         //threat loop
         for (let idx = 0; idx < nearestPlayers.length; idx += 1) {
             const threat = nearestPlayers[idx];
+            debugger
 
-            if ((threat.mass > self.mass) && self.calculateDistance(threat) < 600) {
-    
+            if ((threat.mass > self.mass) && self.calculateDistance(threat) < 200) {
+                debugger
+
                 self.threatened = true;
                 self.threat = threat;
 
@@ -251,22 +250,24 @@ class AI {
         
         //target loop
         for (let idx = 0; idx < nearestPlayers.length; idx += 1) {
+            debugger
 
-            this.threatened = false;
-            this.threat = null;
+           self.threatened = false;
+           self.threat = null;
 
             const target = nearestPlayers[idx];
-            if (target.mass < self.mass && self.calculateDistance(target) < 2000) {
+            if (target.mass < self.mass && self.calculateDistance(target) < 1000) {
+                debugger
     
                 self.target = target;
 
-                self.dx = target.boardX + target.radius - self.boardX + self.radius;
-                self.dy = target.boardY + target.radius - self.boardY + self.radius;
+                self.dx = target.boardX - self.boardX;
+                self.dy = target.boardY - self.boardY;
                 self.targetDistance = Math.sqrt(self.dx * self.dx + self.dy * self.dy);
 
                 // do I need to account for radius here?
-                self.nextPos[0] = self.boardX - ((self.dx / self.targetDistance) * self.speed);
-                self.nextPos[1] = self.boardY - ((self.dy / self.targetDistance) * self.speed);
+                self.nextPos[0] = self.boardX + ((self.dx / self.targetDistance) * self.speed);
+                self.nextPos[1] = self.boardY + ((self.dy / self.targetDistance) * self.speed);
                 return;
             }   
         }
@@ -274,11 +275,12 @@ class AI {
         // matter loop
         const nearestMatter = this.sortNearbyMatter(nearby);
         for (let idx = 0; idx < nearestMatter.length; idx += 1) {
-
+            debugger
 
             const target = nearestMatter[idx];
             if (self.calculateDistance(target) < self.canvasHeight * self.canvasWidth) {
-    
+                debugger
+
                 self.target = target;
 
                 self.dx = target.boardX + target.radius - self.boardX + self.radius;
@@ -286,14 +288,15 @@ class AI {
                 self.targetDistance = Math.sqrt(self.dx * self.dx + self.dy * self.dy);
 
                 // do I need to account for radius here?
-                self.nextPos[0] = self.boardX - ((self.dx / self.targetDistance) * self.speed);
-                self.nextPos[1] = self.boardY - ((self.dy / self.targetDistance) * self.speed);
+                self.nextPos[0] = self.boardX + ((self.dx / self.targetDistance) * self.speed);
+                self.nextPos[1] = self.boardY + ((self.dy / self.targetDistance) * self.speed);
                 return;
             }
         }
 
-
     }
+
+    // ! HERE !
 
     move(nextPos, dx, dy, distance) {
         let relativeX;
@@ -358,7 +361,7 @@ class AI {
         this.context.fillStyle = this.color;
         this.context.fill();
 
-        this.decideMove();
+        setInterval(this.decideMove(), 5000);
 
         if (this.threatened === true) {
             this.move(this.nextPos, this.dx, this.dy, this.threatDistance);

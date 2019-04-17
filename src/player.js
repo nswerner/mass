@@ -54,7 +54,10 @@ class Player {
                 object.mass = 0;
                 object.consumed = true;
             } else {
-                null;
+                this.mass = 600;
+                this.radius = 600;
+                object.mass = 0;
+                object.consumed = true;
             }
         } else {
             if (this.radius + object.mass < 600) {
@@ -63,36 +66,15 @@ class Player {
                 object.mass = 0;
                 object.consumed = true;
             } else {
-                null;
+                this.mass = 600;
+                this.radius = 600;
+                object.mass = 0;
+                object.consumed = true;
             }
         }
 
         
     }
-
-    // isCollidedWith(object) {
-    //     const objectHitbox = { radius: object.radius, x: object.boardX, y: object.boardY };
-    //     const thisHitbox = { radius: this.radius, x: this.boardX, y: this.boardY };
-
-    //     const dx = objectHitbox.x - thisHitbox.x;
-    //     const dy = objectHitbox.y - thisHitbox.y;
-    //     const distance = Math.sqrt(dx * dx + dy * dy);
-
-    //     if (distance < objectHitbox.radius / 2 + thisHitbox.radius) {
-    //         if (object.radius > this.radius) {
-    //             this.consumed = true;
-    //             object.consumeMatter(this);
-    //             return true;
-    //         } else {
-    //             object.consumed = true;
-    //             this.consumeMatter(object);
-    //             return false;
-    //         }
-    //     } else {
-    //         return false;
-    //     }
-    // }
-
 
     hasCollidedWith(object) {
         const objectHitbox = { radius: object.radius, x: object.boardX, y: object.boardY };
@@ -102,7 +84,7 @@ class Player {
         const dy = objectHitbox.y - thisHitbox.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
 
-        if (distance < objectHitbox.radius / 2 + thisHitbox.radius / 2) {
+        if (distance < objectHitbox.radius + thisHitbox.radius ) {
             return true;
         } else {
             return false;

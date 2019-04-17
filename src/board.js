@@ -18,13 +18,13 @@ class Board {
         //CHANGE REPOPULATE MATTER AS COMPUTER PLAYERS ARE INTRODUCED
 
         this.matter = [];
-        this.createMatter(25);
+        this.createMatter(3000);
         // this.repopulateMatter(100, 5);
 
         this.player = new Player(canvasWidth, canvasHeight, this.context, this.dpi, this);
         
         this.computers = [];
-        this.createAI(25);
+        this.createAI(50);
         this.repopulateAI(5, 8);
 
         this.createMatter = this.createMatter.bind(this);
