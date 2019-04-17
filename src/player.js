@@ -91,7 +91,7 @@ class Player {
         let xDistance;
         let yDistance;
 
-       this.dXdY = [xDistance, yDistance];
+        this.dXdY = [xDistance, yDistance];
 
         // for (let idx = 0; idx < 2; idx += 1) {
         //     this.dXdY[idx] = mousePos[idx] - this.prevMousePos[idx];
@@ -131,13 +131,11 @@ class Player {
             relativeY = nextPos[1] + (0.005 * this.radius);
             if (relativeY > this.boardY) {
                 relativeY = this.boardY - (this.dXdY[1] / this.cursorDistance);
-                debugger
             }
         } else {
             relativeY = nextPos[1] - (0.005 * this.radius);
             if (relativeY < this.boardY) {
                 relativeY = this.boardY + (this.dXdY[1] / this.cursorDistance);
-                debugger
             }
         }
 
