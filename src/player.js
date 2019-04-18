@@ -5,12 +5,13 @@ const Matter = require("./matter");
 
 
 class Player {
-    constructor(canvasWidth, canvasHeight, context, dpi, board, speed) {
+    constructor(canvasWidth, canvasHeight, context, dpi, board, speed, game) {
         this.canvasHeight = canvasHeight;
         this.canvasWidth = canvasWidth;
         this.context = context;
         this.dpi = dpi;
         this.board = board;
+        this.game = game
 
         this.centerX = this.canvasWidth / 2;
         this.centerY = this.canvasHeight / 2;
@@ -41,22 +42,32 @@ class Player {
         this.hasBeenConsumedBy = this.hasBeenConsumedBy.bind(this);
         this.hasConsumedObject = this.hasConsumedObject.bind(this);
 
+        this.gameOver = this.gameOver.bind(this);
+
         this.cheat = this.cheat.bind(this);
         window.cheat = this.cheat;
     }
 
+    gameOver() {
+        setInterval(() => {
+            this.mass += 10;
+            this.radius += 10;
+            this.draw();
+        }, 500);
+    }
+
     consumeMatter(object) {
         if (object instanceof Matter) {
+            debugger
             if (this.radius + object.mass < 600) {
                 this.mass += object.mass;
                 this.radius += object.mass;
                 object.mass = 0;
                 object.consumed = true;
             } else {
-                this.mass = 600;
-                this.radius = 600;
-                object.mass = 0;
-                object.consumed = true;
+                debugger
+                cancelAnimationFrame(this.game.camera.draw);
+                this.gameOver();
             }
         } else {
             if (this.radius + object.mass < 600) {
@@ -65,10 +76,9 @@ class Player {
                 object.mass = 0;
                 object.consumed = true;
             } else {
-                this.mass = 600;
-                this.radius = 600;
-                object.mass = 0;
-                object.consumed = true;
+                debugger
+                cancelAnimationFrame(this.game.camera.draw);
+                this.gameOver();
             }
         }
     }

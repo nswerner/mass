@@ -55,8 +55,6 @@ class Modal {
         }
     }
 
-
-
     startGame() {
         this.startModalBG.style.display = "none";
         this.startModalFG.style.display = "none";

@@ -13,7 +13,7 @@ class Game {
         this.dpi = dpi;
         this.speed = speed;
 
-        this.board = new Board(20000, 15000, this.canvasWidth, this.canvasHeight, this.context, this.dpi, this.speed);
+        this.board = new Board(20000, 15000, this.canvasWidth, this.canvasHeight, this.context, this.dpi, this.speed, this);
         this.camera = new Camera(this.board, this.canvasWidth, this.canvasHeight, this.context, this.dpi);
 
         this.fix_dpi = this.fix_dpi.bind(this);

@@ -5,7 +5,7 @@ const AI = require('./ai');
 
 
 class Board {
-    constructor(boardWidth, boardHeight, canvasWidth, canvasHeight, context, dpi, speed) {
+    constructor(boardWidth, boardHeight, canvasWidth, canvasHeight, context, dpi, speed, game) {
         this.boardWidth = boardWidth;
         this.boardHeight = boardHeight;
 
@@ -22,7 +22,7 @@ class Board {
         this.createMatter(3000);
         this.repopulateMatter(100, 5);
 
-        this.player = new Player(canvasWidth, canvasHeight, this.context, this.dpi, this, speed);
+        this.player = new Player(canvasWidth, canvasHeight, this.context, this.dpi, this, speed, game);
         
         this.computers = [];
 
