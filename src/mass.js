@@ -2,7 +2,6 @@ const Game = require("./game");
 const Modal = require("./modal");
 
 
-
 document.addEventListener("DOMContentLoaded", () => {
     
     let canvas = document.getElementById('canvas'),

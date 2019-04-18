@@ -9,6 +9,7 @@ class Modal {
         this.dpi = dpi;
 
         this.startModalBG = document.getElementById('start-modal');
+        this.startModalBG.style.display = "block";
         this.startModalFG = document.getElementsByClassName('modal-content')[0];
         this.start = document.getElementsByClassName("start")[0];
     

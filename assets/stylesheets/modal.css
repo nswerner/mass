@@ -1,5 +1,5 @@
 .start-modal {
-  display: block;
+  display: none;
   position: relative;
   z-index: 1;
   left: 0;
