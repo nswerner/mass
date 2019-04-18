@@ -1,10 +1,10 @@
 const Game = require("./game");
-const Camera = require("./camera");
-
+const Modal = require("./modal");
 
 
 
 document.addEventListener("DOMContentLoaded", () => {
+    
     let canvas = document.getElementById('canvas'),
     context = canvas.getContext('2d'),
     dpi = window.devicePixelRatio;
@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
     canvasHeight = canvas.height;
     canvasWidth = canvas.width;
 
-    const game = new Game(canvasWidth, canvasHeight, context, dpi);
+    new Game(canvasWidth, canvasHeight, context, dpi, 2).draw();
+    new Modal(canvasWidth, canvasHeight, context, dpi);
 
-    game.draw();
 });

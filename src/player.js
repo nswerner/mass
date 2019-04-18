@@ -5,7 +5,7 @@ const Matter = require("./matter");
 
 
 class Player {
-    constructor(canvasWidth, canvasHeight, context, dpi, board) {
+    constructor(canvasWidth, canvasHeight, context, dpi, board, speed) {
         this.canvasHeight = canvasHeight;
         this.canvasWidth = canvasWidth;
         this.context = context;
@@ -21,7 +21,7 @@ class Player {
         this.radius = 15;
         this.mass = 15;
 
-        this.speed = 8;
+        this.speed = speed;
         this.dXdY = [1, 1];
         this.cursorDistance = 1;
         this.prevMousePos = [1, 1];

@@ -1,47 +1,73 @@
-let startModalBG = document.getElementById('start-modal');
-let startModalFG = document.getElementsByClassName('modal-content')[0];
-let start = document.getElementsByClassName("start")[0];
-
-let pauseModalBG = document.getElementById('pause-modal');
-let pauseModalFG = document.getElementsByClassName('modal-content')[0];
-let resume = document.getElementsByClassName("resume")[0];
+const Game = require('./game');
 
 
-const resumeGame = function(event) {
-    if (event.keyCode === 32) {
-        let pauseModalBG = document.getElementById('pause-modal');
-        pauseModalBG.style.display = "none";
+class Modal {
+    constructor(canvasWidth, canvasHeight, context, dpi) {
+        this.canvasWidth = canvasWidth;
+        this.canvasHeight = canvasHeight;
+        this.context = context;
+        this.dpi = dpi;
 
-        document.removeEventListener('keydown', resumeGame);
-        document.addEventListener('keydown', pauseGame);
+        this.startModalBG = document.getElementById('start-modal');
+        this.startModalFG = document.getElementsByClassName('modal-content')[0];
+        this.start = document.getElementsByClassName("start")[0];
+    
+        this.pauseModalBG = document.getElementById('pause-modal');
+        this.pauseModalFG = document.getElementsByClassName('modal-content')[0];
+        this.resume = document.getElementsByClassName("resume")[0];
+
+        this.start.addEventListener("click", () => {
+            this.startGame();
+        })
+
+        this.resumeGame = this.resumeGame.bind(this);
+        this.pauseGame = this.pauseGame.bind(this);
+        this.startGame = this.startGame.bind(this);
     }
-}
 
-const pauseGame = function(event) {
-    if (event.keyCode === 32) {
-        let pauseModalBG = document.getElementById('pause-modal');
-        pauseModalBG.style.display = "flex";
 
-        let pauseModalFG = document.getElementsByClassName('modal-content')[0];
-        let resume = document.getElementsByClassName("resume")[0];
+    resumeGame(event) {
+        if (event.keyCode === 32 || event === 'click') {
+            this.pauseModalBG = document.getElementById('pause-modal');
+            this.pauseModalBG.style.display = "none";
 
-        document.removeEventListener('keydown', pauseGame);
-        
-        resume.onclick = function () {
-            pauseModalBG.style.display = "none";
+            document.removeEventListener('keydown', this.resumeGame);
+            document.addEventListener('keydown', this.pauseGame);
         }
-
-        document.addEventListener('keydown', resumeGame);
     }
+
+    pauseGame(event) {
+        if (event.keyCode === 32) {
+            this.pauseModalBG = document.getElementById('pause-modal');
+            this.pauseModalBG.style.display = "flex";
+
+            this.pauseModalFG = document.getElementsByClassName('modal-content')[0];
+            this.resume = document.getElementsByClassName("resume")[0];
+
+            document.removeEventListener('keydown', this.pauseGame);
+            
+            this.resume.addEventListener('click', () => {
+                this.resumeGame('click');
+            });
+      
+            document.addEventListener('keydown', this.resumeGame);
+        }
+    }
+
+
+
+    startGame() {
+        this.startModalBG.style.display = "none";
+        this.startModalFG.style.display = "none";
+
+        const game = new Game(this.canvasWidth, this.canvasHeight, this.context, this.dpi);
+        debugger
+        game.start();
+
+        document.addEventListener('keydown', this.pauseGame);
+    }      
 }
 
+module.exports = Modal;
 
-
-start.onclick = function () {
-    startModalBG.style.display = "none";
-    startModalFG.style.display = "none";
-
-    document.addEventListener('keydown', pauseGame);
-        
-}
 

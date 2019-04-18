@@ -5,7 +5,7 @@ const AI = require('./ai');
 
 
 class Board {
-    constructor(boardWidth, boardHeight, canvasWidth, canvasHeight, context, dpi) {
+    constructor(boardWidth, boardHeight, canvasWidth, canvasHeight, context, dpi, speed) {
         this.boardWidth = boardWidth;
         this.boardHeight = boardHeight;
 
@@ -14,17 +14,22 @@ class Board {
 
         this.context = context;
         this.dpi = dpi;
+        this.speed = speed;
 
         //CHANGE REPOPULATE MATTER AS COMPUTER PLAYERS ARE INTRODUCED
 
         this.matter = [];
         this.createMatter(3000);
-        // this.repopulateMatter(100, 5);
+        this.repopulateMatter(100, 5);
 
-        this.player = new Player(canvasWidth, canvasHeight, this.context, this.dpi, this);
+        this.player = new Player(canvasWidth, canvasHeight, this.context, this.dpi, this, speed);
         
         this.computers = [];
-        this.repopulateAI(5, 10);
+
+        if (speed > 7) {
+            this.createAI(60);
+            // this.repopulateAI(5, 10);
+        }
         
         this.createMatter = this.createMatter.bind(this);
         this.repopulateMatter = this.repopulateMatter.bind(this);
@@ -33,8 +38,6 @@ class Board {
         // this.repopulateAI = this.repopulateAI.bind(this);
         
         this.draw = this.draw.bind(this);
-
-        setTimeout(() => this.createAI(25), 10000);
     }
 
     repopulateMatter(n, seconds) {

@@ -24,7 +24,7 @@ class Camera {
         this.drawComputers = this.drawComputers.bind(this);
         this.drawPlayer = this.drawPlayer.bind(this);
         this.drawBoard = this.drawBoard.bind(this);
-
+        this.wait = this.wait.bind(this);
         
     }
 
@@ -90,8 +90,9 @@ class Camera {
             for (let idx2 = idx + 1; idx2 < this.computers.length - 1; idx2 += 1) {
                 let computer2 = this.computers[idx2];
                 if (computer.hasCollidedWith(computer2)) {
-                    debugger
-                    if (computer.hasBeenConsumedBy(computer2) === false) {
+                    if (computer.hasBeenConsumedBy(computer2)) {
+                        null;
+                    } else {    
                         computer.hasConsumedObject(computer2);
                     } 
                 }
@@ -151,6 +152,21 @@ class Camera {
         
         // this.board.draw();
         //board draw here actually applies stroke to player???
+    }
+
+    start() {
+        this.within();
+        this.drawMatter();
+        this.drawPlayer();
+        this.wait(500);
+    }
+
+    wait(ms) {
+        let start = Date.now(),
+            now = start;
+        while (now - start < ms) {
+            now = Date.now();
+        }
     }
 
 }

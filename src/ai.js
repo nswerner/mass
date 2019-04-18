@@ -84,11 +84,24 @@ class AI {
         const dy = objectHitbox.y - thisHitbox.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
 
+
+
         if (distance < objectHitbox.radius + thisHitbox.radius) {
             return true;
         } else {
             return false;
         }
+
+
+
+        // THIS DID NOT WORK! WITHIN STOPPED WORKING
+
+        // if (this.calculateDistance(object) <= 0) {
+        //     return true;
+        // } else {
+        //     return false;
+        // }
+
     }
 
     hasBeenConsumedBy(object) {
@@ -222,6 +235,8 @@ class AI {
                 self.threatened = true;
                 self.threat = threat;
 
+                // older way 
+
                 // self.dx = threat.boardX + threat.radius - self.boardX + self.radius;
                 // self.dy = threat.boardY + threat.radius - self.boardY + self.radius;
                 // self.threatDistance = Math.sqrt(self.dx * self.dx + self.dy * self.dy);
@@ -230,6 +245,8 @@ class AI {
                 // self.nextPos[0] = self.boardX - ((self.dx / self.threatDistance) * self.speed);
                 // self.nextPos[1] = self.boardY - ((self.dy / self.threatDistance) * self.speed);
                 // return;
+
+                // older way
 
                 if (self.boardX < threat.boardX) {
                     self.dx = (self.boardX + self.radius) - (threat.boardX - threat.radius);
@@ -246,7 +263,6 @@ class AI {
                 self.threatDistance = Math.sqrt(self.dx * self.dx + self.dy * self.dy);
                 self.nextPos[0] = self.boardX - ((self.dx / self.threatDistance) * self.speed);
                 self.nextPos[1] = self.boardY - ((self.dy / self.threatDistance) * self.speed);
-                debugger
                 return;
             }
         } 
