@@ -222,13 +222,31 @@ class AI {
                 self.threatened = true;
                 self.threat = threat;
 
-                self.dx = threat.boardX + threat.radius - self.boardX + self.radius;
-                self.dy = threat.boardY + threat.radius - self.boardY + self.radius;
-                self.threatDistance = Math.sqrt(self.dx * self.dx + self.dy * self.dy);
+                // self.dx = threat.boardX + threat.radius - self.boardX + self.radius;
+                // self.dy = threat.boardY + threat.radius - self.boardY + self.radius;
+                // self.threatDistance = Math.sqrt(self.dx * self.dx + self.dy * self.dy);
 
-                // do I need to account for radius here?
+                // // do I need to account for radius here?
+                // self.nextPos[0] = self.boardX - ((self.dx / self.threatDistance) * self.speed);
+                // self.nextPos[1] = self.boardY - ((self.dy / self.threatDistance) * self.speed);
+                // return;
+
+                if (self.boardX < threat.boardX) {
+                    self.dx = (self.boardX + self.radius) - (threat.boardX - threat.radius);
+                } else {
+                    self.dx = (threat.boardX + threat.radius) - (self.boardX - self.radius);
+                }
+
+                if (self.boardY < threat.boardY) {
+                    self.dy = (self.boardY + self.radius) - (threat.boardY - threat.radius);
+                } else {
+                    self.dy = (threat.boardY + threat.radius) - (self.boardY - self.radius);
+                }
+
+                self.threatDistance = Math.sqrt(self.dx * self.dx + self.dy * self.dy);
                 self.nextPos[0] = self.boardX - ((self.dx / self.threatDistance) * self.speed);
                 self.nextPos[1] = self.boardY - ((self.dy / self.threatDistance) * self.speed);
+                debugger
                 return;
             }
         } 
