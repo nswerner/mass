@@ -24,8 +24,8 @@ class Board {
         this.player = new Player(canvasWidth, canvasHeight, this.context, this.dpi, this);
         
         this.computers = [];
-        this.createAI(50);
-        this.repopulateAI(5, 8);
+        this.createAI(200);
+        this.repopulateAI(3, 12);
 
         this.createMatter = this.createMatter.bind(this);
         this.repopulateMatter = this.repopulateMatter.bind(this);

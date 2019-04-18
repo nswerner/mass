@@ -24,6 +24,8 @@ class Camera {
         this.drawComputers = this.drawComputers.bind(this);
         this.drawPlayer = this.drawPlayer.bind(this);
         this.drawBoard = this.drawBoard.bind(this);
+
+        
     }
 
     updatePos() {
@@ -45,9 +47,9 @@ class Camera {
         
         this.computers = [];
         for (let idx = 0; idx < this.allComputers.length; idx += 1) {
-            if (this.allComputers[idx].boardX + this.allComputers[idx].radius < this.boardX || this.allComputers[idx].boardX - this.allComputers[idx].radius > this.boardX + this.canvasWidth) {
+            if (this.allComputers[idx].boardX + this.allComputers[idx].radius < this.boardX - 200 || this.allComputers[idx].boardX - this.allComputers[idx].radius > this.boardX + this.canvasWidth + 200) {
                 continue;
-            } else if (this.allComputers[idx].boardY + this.allComputers[idx].radius < this.boardY || this.allComputers[idx].boardY - this.allComputers[idx].radius > this.boardY + this.canvasHeight) {
+            } else if (this.allComputers[idx].boardY + this.allComputers[idx].radius < this.boardY - 200 || this.allComputers[idx].boardY - this.allComputers[idx].radius > this.boardY + this.canvasHeight + 200) {
                 continue;
             } else if (this.allComputers[idx].consumed === false) {
                 this.computers.push(this.allComputers[idx]);
@@ -87,21 +89,17 @@ class Camera {
 
             for (let idx2 = idx + 1; idx2 < this.computers.length - 1; idx2 += 1) {
                 let computer2 = this.computers[idx2];
-
                 if (computer.hasCollidedWith(computer2)) {
-
-                    if (computer.hasBeenConsumedBy(computer2)) {
-                        null;
-                    } else {
+                    debugger
+                    if (computer.hasBeenConsumedBy(computer2) === false) {
                         computer.hasConsumedObject(computer2);
-                    }
+                    } 
                 }
             }
         }
     }
 
     drawMatter() {
-        
         for (let idx = 0; idx < this.matter.length; idx += 1) {
             if (this.matter[idx].consumed === false) {
                 this.matter[idx].draw(this.boardX, this.boardY);
@@ -123,10 +121,10 @@ class Camera {
     }
 
 
+    // GAME OVER SPOT
     drawPlayer() {
         
         if (this.player.consumed === true) {
-            debugger
             null;
         } else {
             this.player.draw();
@@ -134,12 +132,9 @@ class Camera {
     }
 
     draw() {
-        //grab all objects within frame
+        //grab all objects within frame, check for collisions, and relimit data
         this.within();
-
-        // NEW
-        this.checkCollisions();
-
+        this.checkCollisions();        
         this.within();
 
         //draw board border

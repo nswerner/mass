@@ -62,6 +62,13 @@
   color: black;
 }
 
+.revisit-modal-text {
+  font-family: Arial, Helvetica, sans-serif;
+  /* padding-top:  */
+  font-size: 16px;
+  color: black;
+}
+
 .start {
   font-family: Arial, Helvetica, sans-serif;
   margin-top: 40px;

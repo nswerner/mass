@@ -45,7 +45,6 @@ class Player {
         window.cheat = this.cheat;
     }
 
-    // CHANGE THIS - SETTING MAX SIZE
     consumeMatter(object) {
         if (object instanceof Matter) {
             if (this.radius + object.mass < 600) {
@@ -72,8 +71,6 @@ class Player {
                 object.consumed = true;
             }
         }
-
-        
     }
 
     hasCollidedWith(object) {
@@ -84,7 +81,7 @@ class Player {
         const dy = objectHitbox.y - thisHitbox.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
 
-        if (distance < objectHitbox.radius + thisHitbox.radius ) {
+        if (distance < objectHitbox.radius + thisHitbox.radius) {
             return true;
         } else {
             return false;
