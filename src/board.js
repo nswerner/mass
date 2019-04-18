@@ -24,16 +24,17 @@ class Board {
         this.player = new Player(canvasWidth, canvasHeight, this.context, this.dpi, this);
         
         this.computers = [];
-        this.createAI(200);
-        this.repopulateAI(3, 12);
-
+        this.repopulateAI(5, 10);
+        
         this.createMatter = this.createMatter.bind(this);
         this.repopulateMatter = this.repopulateMatter.bind(this);
-
+        
         this.createAI = this.createAI.bind(this);
         // this.repopulateAI = this.repopulateAI.bind(this);
         
         this.draw = this.draw.bind(this);
+
+        setTimeout(() => this.createAI(25), 10000);
     }
 
     repopulateMatter(n, seconds) {

@@ -113,8 +113,21 @@ class AI {
         const thisHitbox = { radius: this.radius, x: this.boardX, y: this.boardY };
         const objectHitbox = { radius: object.radius, x: object.boardX, y: object.boardY };
 
-        const dx = objectHitbox.x - thisHitbox.x;
-        const dy = objectHitbox.y - thisHitbox.y;
+        let dx;
+        let dy;
+
+        if (thisHitbox.x < objectHitbox.x) {
+            dx = (thisHitbox.x + thisHitbox.radius) - (objectHitbox.x - objectHitbox.radius);
+        } else {
+            dx = (objectHitbox.x + objectHitbox.radius) - (thisHitbox.x - thisHitbox.radius); 
+        }
+
+        if (thisHitbox.y < objectHitbox.y) {
+            dy = (thisHitbox.y + thisHitbox.radius) - (objectHitbox.y - objectHitbox.radius);
+        } else {
+            dy = (objectHitbox.y + objectHitbox.radius) - (thisHitbox.y - thisHitbox.radius); 
+        }
+
         const distance = Math.sqrt(dx * dx + dy * dy);
 
         return distance;
@@ -320,7 +333,7 @@ class AI {
 
         this.context.fillStyle = this.color;
         this.context.fill();
-        setTimeout(this.decideMove(), 5000);
+        this.decideMove();
 
         if (this.threatened === true) {
             this.move(this.nextPos, this.dx, this.dy, this.threatDistance);
