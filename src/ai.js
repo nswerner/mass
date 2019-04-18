@@ -56,10 +56,10 @@ class AI {
         this.hasBeenConsumedBy = this.hasBeenConsumedBy.bind(this);
         this.hasConsumedObject = this.hasConsumedObject.bind(this);
         this.consumeMatter = this.consumeMatter.bind(this);
+
     }
 
     consumeMatter(object) {
-
         if (object instanceof Matter) {
             if (this.radius + object.mass < 600) {
                 this.mass += object.mass;
@@ -153,6 +153,8 @@ class AI {
                 continue;
             } else if (matter.boardY < this.frameOrigin[1] || matter.boardY > this.frameOrigin[1] + this.canvasHeight) {
                 continue;
+            } else if (matter.consumed === true) {
+                continue;
             } else {
                 nearMatter[this.calculateDistance(matter)] = matter;
             }
@@ -163,6 +165,8 @@ class AI {
             if (computer.boardX + computer.radius < this.frameOrigin[0] || computer.boardX + computer.radius > this.frameOrigin[0] + this.canvasWidth) {
                 continue;
             } else if (computer.boardY + computer.radius < this.frameOrigin[1] || computer.boardY + computer.radius > this.frameOrigin[1] + this.canvasHeight) {
+                continue;
+            } else if (this === computer || computer.consumed === true) {
                 continue;
             } else {
                 nearComputers[this.calculateDistance(computer)] = computer;
@@ -175,7 +179,9 @@ class AI {
             null;
         } else if (player.boardY + player.radius < this.frameOrigin[1] || player.boardY + player.radius > this.frameOrigin[1] + this.canvasHeight) {
             null;
-        } else {
+        } else if (player.consumed === true) {
+            null;
+        } else{
             nearPlayer[this.calculateDistance(player)] = player;
         }
 
@@ -256,7 +262,7 @@ class AI {
            self.threat = null;
 
             const target = nearestPlayers[idx];
-            if (target.mass < self.mass && self.calculateDistance(target) < 1000) {
+            if (target.mass < self.mass && self.calculateDistance(target) < this.canvasHeight*this.canvasWidth) {
                 debugger
     
                 self.target = target;
@@ -274,25 +280,17 @@ class AI {
 
         // matter loop
         const nearestMatter = this.sortNearbyMatter(nearby);
-        for (let idx = 0; idx < nearestMatter.length; idx += 1) {
-            debugger
+        
+        self.target = nearestMatter[0];
 
-            const target = nearestMatter[idx];
-            if (self.calculateDistance(target) < self.canvasHeight * self.canvasWidth) {
-                debugger
+        self.dx = self.target.boardX - self.boardX;
+        self.dy = self.target.boardY - self.boardY;
+        self.targetDistance = Math.sqrt(self.dx * self.dx + self.dy * self.dy);
 
-                self.target = target;
-
-                self.dx = target.boardX + target.radius - self.boardX + self.radius;
-                self.dy = target.boardY + target.radius - self.boardY + self.radius;
-                self.targetDistance = Math.sqrt(self.dx * self.dx + self.dy * self.dy);
-
-                // do I need to account for radius here?
-                self.nextPos[0] = self.boardX + ((self.dx / self.targetDistance) * self.speed);
-                self.nextPos[1] = self.boardY + ((self.dy / self.targetDistance) * self.speed);
-                return;
-            }
-        }
+        // do I need to account for radius here?
+        self.nextPos[0] = self.boardX + ((self.dx / self.targetDistance) * self.speed);
+        self.nextPos[1] = self.boardY + ((self.dy / self.targetDistance) * self.speed);
+        return;
 
     }
 
@@ -360,8 +358,7 @@ class AI {
 
         this.context.fillStyle = this.color;
         this.context.fill();
-
-        setInterval(this.decideMove(), 5000);
+        setTimeout(this.decideMove(), 2000);
 
         if (this.threatened === true) {
             this.move(this.nextPos, this.dx, this.dy, this.threatDistance);

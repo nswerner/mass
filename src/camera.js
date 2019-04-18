@@ -126,7 +126,7 @@ class Camera {
     drawPlayer() {
         
         if (this.player.consumed === true) {
-            // CHANGE THIS: create game over modal
+            debugger
             null;
         } else {
             this.player.draw();
