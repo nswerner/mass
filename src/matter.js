@@ -1,9 +1,7 @@
-const { COLORS } = require("../assets/palette/palette");
-const { Game } = require("./game");
 
 
 class Matter {
-    constructor(board, canvasWidth, canvasHeight, context, dpi, color, consumed = false) {
+    constructor(board, canvasWidth, canvasHeight, context, dpi, color) {
         this.board = board;
         this.context = context;
         this.dpi = dpi;
@@ -49,8 +47,6 @@ class Matter {
             12, 12
         );
     }
-
-    
 
 
 }

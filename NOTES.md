@@ -29,3 +29,13 @@
     - when player loses, the computer that ate player enlarges
 
 6) Clicking start initiates a new game
+
+
+
+///
+
+BUGS!
+
+Circular dependency issues with modal
+
+AI distance calculations

@@ -8,6 +8,7 @@ class Board {
     constructor(boardWidth, boardHeight, canvasWidth, canvasHeight, context, dpi, speed, game) {
         this.boardWidth = boardWidth;
         this.boardHeight = boardHeight;
+        this.game = game;
 
         this.canvasWidth = canvasWidth;
         this.canvasHeight = canvasHeight;
@@ -15,8 +16,6 @@ class Board {
         this.context = context;
         this.dpi = dpi;
         this.speed = speed;
-
-        //CHANGE REPOPULATE MATTER AS COMPUTER PLAYERS ARE INTRODUCED
 
         this.matter = [];
         this.createMatter(3000);
@@ -27,15 +26,13 @@ class Board {
         this.computers = [];
 
         if (speed > 7) {
-            this.createAI(60);
-            // this.repopulateAI(5, 10);
+            this.createAI(100, this.game);
         }
         
         this.createMatter = this.createMatter.bind(this);
         this.repopulateMatter = this.repopulateMatter.bind(this);
         
         this.createAI = this.createAI.bind(this);
-        // this.repopulateAI = this.repopulateAI.bind(this);
         
         this.draw = this.draw.bind(this);
     }
@@ -59,21 +56,21 @@ class Board {
         }
     }
 
-    createAI(n) {
+    createAI(n, game) {
         for (let idx = 0; idx < n - n/5; idx += 1) {
-            let localAI = new AI(this, this.canvasWidth, this.canvasHeight, this.context, this.dpi, COLORS[Math.floor(Math.random() * COLORS.length)], Math.floor((Math.random() + 0.05) * 100));
+            let localAI = new AI(this, this.canvasWidth, this.canvasHeight, this.context, this.dpi, COLORS[Math.floor(Math.random() * COLORS.length)], Math.floor((Math.random() + 0.05) * 100), game);
             this.computers.push(localAI);
         }
 
         for (let idx = 0; idx < n / 5; idx += 1) {
-            let localAI = new AI(this, this.canvasWidth, this.canvasHeight, this.context, this.dpi, COLORS[Math.floor(Math.random() * COLORS.length)], Math.floor((Math.random() + 0.05) * 300));
+            let localAI = new AI(this, this.canvasWidth, this.canvasHeight, this.context, this.dpi, COLORS[Math.floor(Math.random() * COLORS.length)], Math.floor((Math.random() + 0.05) * 300), game);
             this.computers.push(localAI);
         }
     }
 
-    repopulateAI(n, seconds) {
-        setInterval(() => this.createAI(n), seconds * 1000);
-    }
+    // repopulateAI(n, seconds) {
+    //     setInterval(() => this.createAI(n), seconds * 1000);
+    // }
 
     draw() {
         this.context.strokeStyle = 'black';

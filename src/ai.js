@@ -1,10 +1,11 @@
-const { COLORS } = require("../assets/palette/palette");
-const { game } = require("./mass");
 const Matter = require('./matter');
+const Player = require('./player');
+// const Modal = require('./modal');
+
 
 
 class AI {
-    constructor(board, canvasWidth, canvasHeight, context, dpi, color, size) {
+    constructor(board, canvasWidth, canvasHeight, context, dpi, color, size, game) {
         this.board = board;
 
         this.boardWidth = board.boardWidth;
@@ -16,6 +17,7 @@ class AI {
         this.context = context;
         this.dpi = dpi;
         this.board = board;
+        this.game = game;
         
         this.boardX = Math.floor(Math.random() * (this.board.boardWidth));
         this.boardY = Math.floor(Math.random() * (this.board.boardHeight));
@@ -56,6 +58,12 @@ class AI {
         this.hasConsumedObject = this.hasConsumedObject.bind(this);
         this.consumeMatter = this.consumeMatter.bind(this);
 
+        this.gameOver = this.gameOver.bind(this);
+    }
+
+    gameOver() {
+        // this.game.destroy();
+        // new Modal(this.canvasWidth, this.canvasHeight, this.context, this.dpi);
     }
 
     consumeMatter(object) {
@@ -65,14 +73,29 @@ class AI {
                 this.radius += object.mass;
                 object.mass = 0;
                 object.consumed = true;
-            } 
-        } else {
+            } else {
+                this.mass = 599;
+                this.radius = 600;
+                object.mass = 0;
+                object.consumed = true;
+            }
+        } else if (object instanceof AI) {
             if (this.radius + object.mass < 600) {
                 this.mass += object.mass / 3;
                 this.radius += object.mass / 3;
                 object.mass = 0;
                 object.consumed = true;
+            } else {
+                this.mass = 599;
+                this.radius = 600;
+                object.mass = 0;
+                object.consumed = true;
             }
+        } else if (object instanceof Player) {
+            object.consumed = true;
+            this.context.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
+            cancelAnimationFrame(this.game.draw);
+            this.gameOver();
         }
     }
 
@@ -91,16 +114,6 @@ class AI {
         } else {
             return false;
         }
-
-
-
-        // THIS DID NOT WORK! WITHIN STOPPED WORKING
-
-        // if (this.calculateDistance(object) <= 0) {
-        //     return true;
-        // } else {
-        //     return false;
-        // }
 
     }
 
@@ -375,7 +388,6 @@ class AI {
             this.move(this.nextPos, this.dx, this.dy, this.targetDistance);
         }
     }
-
 
 }
 

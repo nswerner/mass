@@ -1,5 +1,4 @@
 const { COLORS } = require("../assets/palette/palette");
-const { game }  = require("./mass");
 const Matter = require("./matter");
 
 
@@ -11,7 +10,7 @@ class Player {
         this.context = context;
         this.dpi = dpi;
         this.board = board;
-        this.game = game
+        this.game = game;
 
         this.centerX = this.canvasWidth / 2;
         this.centerY = this.canvasHeight / 2;
@@ -46,27 +45,42 @@ class Player {
 
         this.cheat = this.cheat.bind(this);
         window.cheat = this.cheat;
+
+        this.setIntervalX = this.setIntervalX.bind(this);
+        this.chainReaction = this.chainReaction.bind(this);
+    }
+
+    setIntervalX(callback, delay, repetitions) {
+        let x = 0;
+        let intervalID = window.setInterval(function () {
+
+            callback();
+
+            if (++x === repetitions) {
+                window.clearInterval(intervalID);
+            }
+        }, delay);
+    }
+
+    chainReaction() {
+        this.mass += 2.5;
+        this.radius += 2.5;
+        this.game.camera.draw();
     }
 
     gameOver() {
-        setInterval(() => {
-            this.mass += 10;
-            this.radius += 10;
-            this.draw();
-        }, 500);
+        this.setIntervalX(this.chainReaction, 1000, 100);
     }
 
     consumeMatter(object) {
         if (object instanceof Matter) {
-            debugger
             if (this.radius + object.mass < 600) {
                 this.mass += object.mass;
                 this.radius += object.mass;
                 object.mass = 0;
                 object.consumed = true;
             } else {
-                debugger
-                cancelAnimationFrame(this.game.camera.draw);
+                cancelAnimationFrame(this.game.draw);
                 this.gameOver();
             }
         } else {
@@ -76,8 +90,7 @@ class Player {
                 object.mass = 0;
                 object.consumed = true;
             } else {
-                debugger
-                cancelAnimationFrame(this.game.camera.draw);
+                cancelAnimationFrame(this.game.draw);
                 this.gameOver();
             }
         }

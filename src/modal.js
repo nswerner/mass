@@ -55,12 +55,14 @@ class Modal {
         }
     }
 
+
+
     startGame() {
         this.startModalBG.style.display = "none";
         this.startModalFG.style.display = "none";
 
-        const game = new Game(this.canvasWidth, this.canvasHeight, this.context, this.dpi);
         debugger
+        const game = new Game(this.canvasWidth, this.canvasHeight, this.context, this.dpi);
         game.start();
 
         document.addEventListener('keydown', this.pauseGame);

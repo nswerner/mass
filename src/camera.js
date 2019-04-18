@@ -25,7 +25,6 @@ class Camera {
         this.drawPlayer = this.drawPlayer.bind(this);
         this.drawBoard = this.drawBoard.bind(this);
         this.wait = this.wait.bind(this);
-        
     }
 
     updatePos() {

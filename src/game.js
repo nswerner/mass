@@ -1,8 +1,5 @@
-// const Player = require('./player');
-// const Matter = require('./matter');
 const Board = require('./board');
 const Camera = require('./camera');
-const { COLORS } = require('../assets/palette/palette');
 
 
 class Game {
@@ -18,9 +15,10 @@ class Game {
 
         this.fix_dpi = this.fix_dpi.bind(this);
         this.draw = this.draw.bind(this);
-        this.start = this.start.bind(this);
-    }
+        this.start = this.start.bind(this);  
 
+        debugger
+    }
 
     fix_dpi() {
         let style = {
@@ -39,27 +37,21 @@ class Game {
     start() {
         this.context.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
 
-        // this.camera.updatePos();
         this.camera.start();
         this.draw();
     }
-
-
 
     draw() {
         this.fix_dpi();
         this.context.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
 
         this.camera.updatePos();
-        // this.board.draw();
         this.camera.draw();
         
         requestAnimationFrame(this.draw);
     }
 
 }
-
-
 
 
 module.exports = Game;
