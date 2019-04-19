@@ -1,11 +1,14 @@
+
+
 class Camera {
-    constructor(board, canvasWidth, canvasHeight, context, dpi) {
+    constructor(board, canvasWidth, canvasHeight, context, dpi, modal) {
         this.board = board;
 
         this.canvasWidth = canvasWidth;
         this.canvasHeight = canvasHeight;
         this.context = context;
         this.dpi = dpi;
+        this.modal = modal;
 
         this.player = this.board.player;
         this.boardX = this.player.boardX - (this.canvasWidth / 2); 
@@ -46,9 +49,9 @@ class Camera {
         
         this.computers = [];
         for (let idx = 0; idx < this.allComputers.length; idx += 1) {
-            if (this.allComputers[idx].boardX + this.allComputers[idx].radius < this.boardX - 200 || this.allComputers[idx].boardX - this.allComputers[idx].radius > this.boardX + this.canvasWidth + 200) {
+            if (this.allComputers[idx].boardX - this.allComputers[idx].radius < this.boardX - 1000 || this.allComputers[idx].boardX + this.allComputers[idx].radius > this.boardX + this.canvasWidth + 1000) {
                 continue;
-            } else if (this.allComputers[idx].boardY + this.allComputers[idx].radius < this.boardY - 200 || this.allComputers[idx].boardY - this.allComputers[idx].radius > this.boardY + this.canvasHeight + 200) {
+            } else if (this.allComputers[idx].boardY - this.allComputers[idx].radius < this.boardY - 1000 || this.allComputers[idx].boardY + this.allComputers[idx].radius > this.boardY + this.canvasHeight + 1000) {
                 continue;
             } else if (this.allComputers[idx].consumed === false) {
                 this.computers.push(this.allComputers[idx]);
@@ -148,6 +151,8 @@ class Camera {
 
         //draw player
         this.drawPlayer();
+
+        this.modal.draw();
         
         // this.board.draw();
         //board draw here actually applies stroke to player???

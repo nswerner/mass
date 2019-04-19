@@ -27,6 +27,7 @@ class Player {
         this.prevMousePos = [1, 1];
 
         this.consumed = false;
+        this.won = false;
 
         this.color = COLORS[Math.floor(Math.random() * COLORS.length)];
         this.color2 = COLORS[Math.floor(Math.random() * COLORS.length)];
@@ -58,18 +59,21 @@ class Player {
 
             if (++x === repetitions) {
                 window.clearInterval(intervalID);
+                window.cancelAnimationFrame();
+                this.game.destroy();
             }
         }, delay);
     }
 
     chainReaction() {
-        this.mass += 2.5;
-        this.radius += 2.5;
+        this.won= true;
+        this.mass += 3;
+        this.radius += 3;
         this.game.camera.draw();
     }
 
     gameOver() {
-        this.setIntervalX(this.chainReaction, 1000, 100);
+        this.setIntervalX(this.chainReaction, 1000, 25);
     }
 
     consumeMatter(object) {
@@ -90,6 +94,7 @@ class Player {
                 object.mass = 0;
                 object.consumed = true;
             } else {
+                object.consumed = true;
                 cancelAnimationFrame(this.game.draw);
                 this.gameOver();
             }

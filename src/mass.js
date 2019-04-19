@@ -23,9 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
     canvasHeight = canvas.height;
     canvasWidth = canvas.width;
 
-    debugger
-
-    new Game(canvasWidth, canvasHeight, context, dpi, 2).draw();
-    new Modal(canvasWidth, canvasHeight, context, dpi);
+    const modal = new Modal(canvasWidth, canvasHeight, context, dpi);
+    new Game(canvasWidth, canvasHeight, context, dpi, modal, 2).draw();
 
 });

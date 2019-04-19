@@ -16,7 +16,7 @@ class Matter {
         this.boardY = Math.floor(Math.random() * this.boardHeight);
 
         this.mass = 1;
-        this.radius = 6;
+        this.radius = 7;
 
         this.consumed = false;
         this.color = color;

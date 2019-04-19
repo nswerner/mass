@@ -23,12 +23,14 @@
 
 4) flesh out the AI movement
     - MOSTLY COMPLETE, it needs one more day of finetuning;
+    - AI to AI collision detection is spotty
+
 
 5) WHEN GAME IS OVER, introduce ever expanding mass that takes up the whole screen and pops up a modal to restart
     - when player wins, player enlarges
     - when player loses, the computer that ate player enlarges
 
-6) Clicking start initiates a new game
+6) winning the game comes with a huge performance spike where losing the game does not; examine the difference between the two more closely and fix the performance drop of the win
 
 
 

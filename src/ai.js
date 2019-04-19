@@ -62,8 +62,7 @@ class AI {
     }
 
     gameOver() {
-        // this.game.destroy();
-        // new Modal(this.canvasWidth, this.canvasHeight, this.context, this.dpi);
+        this.game.destroy();
     }
 
     consumeMatter(object) {
