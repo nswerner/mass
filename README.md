@@ -1,15 +1,96 @@
 # Mass
+* ## [Live](https://r0ckf0rd.github.io/mass/)
+
 * ## Background and Overview
 
 Agar.io is a very simple yet engaging game. The point of the game is to increase your mass by eating food and other players and to avoid players larger than you. The larger you are, the slower you move. You can also eject half of your mass to capture/eat other players!
 
   * Wireframes
    
-    * Homepage ![Homepage](https://github.com/r0ckf0rd/mass/blob/master/assets/images/Homepage.png) <br/><br/>
+    * Homepage ![Homepage](https://github.com/r0ckf0rd/mass/blob/master/assets/images/wireframes/Homepage.png) <br/><br/>
 
-    * Gameplay ![Gameplay](https://github.com/r0ckf0rd/mass/blob/master/assets/images/Gameplay.png) <br/><br/>
+    * Gameplay ![Gameplay](https://github.com/r0ckf0rd/mass/blob/master/assets/images/wireframes/Gameplay.png) <br/><br/>
 
-    * Gameplay Annotated ![Gameplay Annotated](https://github.com/r0ckf0rd/mass/blob/master/assets/images/Gameplay-Annotated.png) <br/><br/>
+    * Gameplay Annotated ![Gameplay Annotated](https://github.com/r0ckf0rd/mass/blob/master/assets/images/wireframes/Gameplay-Annotated.png) <br/><br/>
+
+
+  * Gameplay
+    * Homepage ![Homepage](https://github.com/r0ckf0rd/mass/blob/gameover/assets/images/gameplay/start.png)
+	
+	* Game Beginning ![Beginning](https://github.com/r0ckf0rd/mass/blob/gameover/assets/images/gameplay/small.png)
+	
+	* Computer Players ![Computer Players](https://github.com/r0ckf0rd/mass/blob/gameover/assets/images/gameplay/computers.png)
+	
+	* Middle Game ![Middle](https://github.com/r0ckf0rd/mass/blob/gameover/assets/images/gameplay/larger.png)
+	
+	* End Game ![End](https://github.com/r0ckf0rd/mass/blob/gameover/assets/images/gameplay/very_larger.png)
+	
+	* Critical Mass ![Critical Mass](https://github.com/r0ckf0rd/mass/blob/gameover/assets/images/gameplay/critical_mass.png)
+	
+	* Game Over ![Game Over](https://github.com/r0ckf0rd/mass/blob/gameover/assets/images/gameplay/lose.png)
+
+
+* ## Key Features
+	* Configured a camera object that tracks and focuses on the player as they navigate a playfield larger than the display. Delegated animation to the camera object, significantly reducing intensive logic calculations on portions of the playfield unseen by the player
+	* Developed computer players that make real-time decisions with information from their environment 
+	* Utilized the players state to trigger DOM manipulation of the start, pause, and game over modals
+	
+	
+
+```javascript
+    class Camera {
+        constructor(board, canvasWidth, canvasHeight, context, dpi) {
+			...
+        }
+    
+        updatePos() {
+            this.boardX = this.player.boardX - (this.canvasWidth / 2);
+            this.boardY = this.player.boardY - (this.canvasHeight / 2);
+        }
+    
+        within() {
+            this.matter = [];
+            for (let idx = 0; idx < this.allMatter.length; idx += 1) {
+                if (this.allMatter[idx].boardX < this.boardX || this.allMatter[idx].boardX > this.boardX + this.canvasWidth) {
+                    continue;   
+                } else if (this.allMatter[idx].boardY < this.boardY || this.allMatter[idx].boardY > this.boardY + this.canvasHeight) {
+                    continue;
+                } else if (this.allMatter[idx].consumed === false) {
+                    this.matter.push(this.allMatter[idx]);
+                }
+            }
+            
+            this.computers = [];
+            for (let idx = 0; idx < this.allComputers.length; idx += 1) {
+                if (this.allComputers[idx].boardX + this.allComputers[idx].radius < this.boardX - 200 || this.allComputers[idx].boardX - this.allComputers[idx].radius > this.boardX + this.canvasWidth + 200) {
+                    continue;
+                } else if (this.allComputers[idx].boardY + this.allComputers[idx].radius < this.boardY - 200 || this.allComputers[idx].boardY - this.allComputers[idx].radius > this.boardY + this.canvasHeight + 200) {
+                    continue;
+                } else if (this.allComputers[idx].consumed === false) {
+                    this.computers.push(this.allComputers[idx]);
+                }
+            }
+        }
+		
+		 draw() {
+        //grab all objects within frame, check for collisions, and relimit data
+        this.within();
+        this.checkCollisions();        
+        this.within();
+        
+        //draw in-frame matter
+        this.drawMatter();
+
+        //draw in-frame computers
+        this.drawComputers();
+
+        //draw player
+        this.drawPlayer();
+ 
+    }
+}
+```
+
 
 * ## Functionality and MVP Features
 1. Basic App Framework
@@ -60,4 +141,4 @@ Agar.io is a very simple yet engaging game. The point of the game is to increase
     * Create and continuously populate the board with inanimate mass objects
     * A player's mass/size increase when a player consumes an inanimate mass object
 
- 
+
