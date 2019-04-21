@@ -23,7 +23,7 @@ Agar.io is a very simple yet engaging game. The point of the game is to increase
 	
 	* Middle Game ![Middle](https://github.com/r0ckf0rd/mass/blob/gameover/assets/images/gameplay/larger.png)
 	
-	* End Game ![End](https://github.com/r0ckf0rd/mass/blob/gameover/assets/images/gameplay/very_larger.png)
+	* End Game ![End](https://github.com/r0ckf0rd/mass/blob/gameover/assets/images/gameplay/very_large.png)
 	
 	* Critical Mass ![Critical Mass](https://github.com/r0ckf0rd/mass/blob/gameover/assets/images/gameplay/critical_mass.png)
 	
