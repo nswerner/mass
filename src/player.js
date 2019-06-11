@@ -59,8 +59,7 @@ class Player {
 
             if (++x === repetitions) {
                 window.clearInterval(intervalID);
-                window.cancelAnimationFrame();
-                this.game.destroy();
+                // window.cancelAnimationFrame();
             }
         }, delay);
     }
@@ -69,11 +68,14 @@ class Player {
         this.won= true;
         this.mass += 3;
         this.radius += 3;
-        this.game.camera.draw();
     }
 
     gameOver() {
         this.setIntervalX(this.chainReaction, 1000, 25);
+        setTimeout(0, () => {
+           let canvas =  document.getElementById('canvas');
+           canvas.remove();
+        })
     }
 
     consumeMatter(object) {

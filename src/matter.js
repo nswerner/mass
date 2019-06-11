@@ -32,7 +32,7 @@ class Matter {
         const dy = playerHitbox.y - matterHitbox.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
 
-        if (distance < playerHitbox.radius + matterHitbox.radius) {
+        if (distance < playerHitbox.radius + matterHitbox.radius + 5) {
             return true;
         } else {
             return false;

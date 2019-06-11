@@ -11,7 +11,7 @@ class Modal {
         this.player = "player";
 
         this.startModalBG = document.getElementById('start-modal');
-        this.startModalBG.style.display = "block";
+        this.startModalBG.style.display = "none";
         this.start = document.getElementsByClassName("start")[0];
         this.start.addEventListener("click", () => {
             this.startGame();

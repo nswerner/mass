@@ -26,4 +26,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const modal = new Modal(canvasWidth, canvasHeight, context, dpi);
     new Game(canvasWidth, canvasHeight, context, dpi, modal, 2).draw();
 
+    this.startModalBG = document.getElementById('start-modal');
+    this.startModalBG.style.display = "block";
 });

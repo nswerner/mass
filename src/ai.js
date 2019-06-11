@@ -58,11 +58,6 @@ class AI {
         this.hasConsumedObject = this.hasConsumedObject.bind(this);
         this.consumeMatter = this.consumeMatter.bind(this);
 
-        this.gameOver = this.gameOver.bind(this);
-    }
-
-    gameOver() {
-        this.game.destroy();
     }
 
     consumeMatter(object) {
@@ -242,7 +237,7 @@ class AI {
             const threat = nearestPlayers[idx];
         
 
-            if ((threat.mass > self.mass) && self.calculateDistance(threat) < 350) {
+            if ((threat.mass > self.mass) && self.calculateDistance(threat) < 450) {
             
                 self.threatened = true;
                 self.threat = threat;
@@ -314,7 +309,10 @@ class AI {
         this.nextPos[0] = this.boardX + ((this.dx / this.targetDistance) * this.speed);
         this.nextPos[1] = this.boardY + ((this.dy / this.targetDistance) * this.speed);
         return;
+    }
 
+    allDxDy(start, end) {
+        
     }
 
     move(nextPos, dx, dy, distance) {

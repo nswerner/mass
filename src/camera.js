@@ -49,9 +49,9 @@ class Camera {
         
         this.computers = [];
         for (let idx = 0; idx < this.allComputers.length; idx += 1) {
-            if (this.allComputers[idx].boardX - this.allComputers[idx].radius < this.boardX - 1000 || this.allComputers[idx].boardX + this.allComputers[idx].radius > this.boardX + this.canvasWidth + 1000) {
+            if (this.allComputers[idx].boardX - this.allComputers[idx].radius < this.boardX - 2000 || this.allComputers[idx].boardX + this.allComputers[idx].radius > this.boardX + this.canvasWidth + 2000) {
                 continue;
-            } else if (this.allComputers[idx].boardY - this.allComputers[idx].radius < this.boardY - 1000 || this.allComputers[idx].boardY + this.allComputers[idx].radius > this.boardY + this.canvasHeight + 1000) {
+            } else if (this.allComputers[idx].boardY - this.allComputers[idx].radius < this.boardY - 2000 || this.allComputers[idx].boardY + this.allComputers[idx].radius > this.boardY + this.canvasHeight + 2000) {
                 continue;
             } else if (this.allComputers[idx].consumed === false) {
                 this.computers.push(this.allComputers[idx]);
