@@ -365,9 +365,8 @@ class AI {
         }
     }
 
-
-
     draw(cameraX, cameraY) {
+
         this.context.beginPath();
         this.context.arc(
             this.boardX - cameraX, 

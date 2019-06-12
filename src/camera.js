@@ -135,6 +135,7 @@ class Camera {
     }
 
     draw() {
+
         //grab all objects within frame, check for collisions, and relimit data
         this.within();
         this.checkCollisions();        

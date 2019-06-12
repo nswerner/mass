@@ -35,6 +35,7 @@ class Board {
         this.createAI = this.createAI.bind(this);
         
         this.draw = this.draw.bind(this);
+
     }
 
     repopulateMatter(n, seconds) {
@@ -73,6 +74,7 @@ class Board {
     // }
 
     draw() {
+        this.fix_dpi();
         this.context.strokeStyle = 'black';
         this.context.lineWidth = 3;
         this.context.rect(0, 0, this.boardWidth, this.boardHeight);

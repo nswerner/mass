@@ -214,6 +214,7 @@ class Player {
         }
     }
 
+
     draw() {
         this.context.beginPath();
         this.context.arc(

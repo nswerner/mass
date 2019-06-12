@@ -40,6 +40,7 @@ class Matter {
     }
 
     draw(cameraX, cameraY) {
+
         this.context.fillStyle = this.color;
         this.context.fillRect(
             this.boardX - cameraX,
