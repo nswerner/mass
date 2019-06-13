@@ -64,18 +64,48 @@ class Player {
         }, delay);
     }
 
-    chainReaction() {
-        this.won= true;
-        this.mass += 3;
-        this.radius += 3;
+
+    // recursive approach is not working to animate the size increase
+    chainReaction(n) {
+    //     if (n <= 0) {
+    //         // let canvas = document.getElementById('canvas');
+    //         this.context.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
+    //         return;
+    //     };
+
+    //     this.mass += 0.1;
+    //     this.radius += 0.1;
+    //     this.draw();
+    //     return this.chainReaction(n-1);
     }
 
     gameOver() {
-        this.setIntervalX(this.chainReaction, 1000, 25);
-        setTimeout(0, () => {
-           let canvas =  document.getElementById('canvas');
-           canvas.remove();
-        })
+        if (this.won === false) {
+            this.won = true;
+
+            let myShrinkInterval = setInterval(() => {
+                this.mass -= 10;
+                this.radius -= 10;
+            }, 17);
+
+            setTimeout(()=> {
+                clearInterval(myShrinkInterval);
+            }, 300);
+
+            setTimeout(1000);
+            
+            let myGrowthInterval = setInterval(() => {
+                console.log('inside interval')
+                this.mass += this.mass * 0.01 + 1;
+                this.radius += this.mass * 0.01 + 1;
+                this.draw();
+            }, 17);
+
+            setTimeout(() => {
+                console.log('clearing interval');
+                clearInterval(myGrowthInterval);
+                }, 3000);
+        }
     }
 
     consumeMatter(object) {

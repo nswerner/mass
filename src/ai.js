@@ -1,7 +1,5 @@
 const Matter = require('./matter');
 const Player = require('./player');
-// const Modal = require('./modal');
-
 
 
 class AI {
@@ -57,7 +55,31 @@ class AI {
         this.hasBeenConsumedBy = this.hasBeenConsumedBy.bind(this);
         this.hasConsumedObject = this.hasConsumedObject.bind(this);
         this.consumeMatter = this.consumeMatter.bind(this);
+        this.gameOver = this.gameOver.bind(this);
+    }
 
+    calculateDistance(object) {
+        const thisHitbox = { radius: this.radius, x: this.boardX, y: this.boardY };
+        const objectHitbox = { radius: object.radius, x: object.boardX, y: object.boardY };
+
+        let dx;
+        let dy;
+
+        if (thisHitbox.x < objectHitbox.x) {
+            dx = (thisHitbox.x + thisHitbox.radius) - (objectHitbox.x - objectHitbox.radius);
+        } else {
+            dx = (objectHitbox.x + objectHitbox.radius) - (thisHitbox.x - thisHitbox.radius);
+        }
+
+        if (thisHitbox.y < objectHitbox.y) {
+            dy = (thisHitbox.y + thisHitbox.radius) - (objectHitbox.y - objectHitbox.radius);
+        } else {
+            dy = (objectHitbox.y + objectHitbox.radius) - (thisHitbox.y - thisHitbox.radius);
+        }
+
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        return distance;
     }
 
     consumeMatter(object) {
@@ -89,8 +111,12 @@ class AI {
             object.consumed = true;
             this.context.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
             cancelAnimationFrame(this.game.draw);
-            this.gameOver();
+            // this.gameOver();
         }
+    }
+
+    gameOver() {
+        // this.context.delete();
     }
 
     hasCollidedWith(object) {
@@ -127,30 +153,6 @@ class AI {
         } else {
             return false;
         }
-    }
-
-    calculateDistance(object) {
-        const thisHitbox = { radius: this.radius, x: this.boardX, y: this.boardY };
-        const objectHitbox = { radius: object.radius, x: object.boardX, y: object.boardY };
-
-        let dx;
-        let dy;
-
-        if (thisHitbox.x < objectHitbox.x) {
-            dx = (thisHitbox.x + thisHitbox.radius) - (objectHitbox.x - objectHitbox.radius);
-        } else {
-            dx = (objectHitbox.x + objectHitbox.radius) - (thisHitbox.x - thisHitbox.radius); 
-        }
-
-        if (thisHitbox.y < objectHitbox.y) {
-            dy = (thisHitbox.y + thisHitbox.radius) - (objectHitbox.y - objectHitbox.radius);
-        } else {
-            dy = (objectHitbox.y + objectHitbox.radius) - (thisHitbox.y - thisHitbox.radius); 
-        }
-
-        const distance = Math.sqrt(dx * dx + dy * dy);
-
-        return distance;
     }
 
     nearby() {

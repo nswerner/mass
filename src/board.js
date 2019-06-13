@@ -19,7 +19,7 @@ class Board {
 
         this.matter = [];
         this.createMatter(3000);
-        this.repopulateMatter(100, 5);
+        this.repopulateMatter(250, 5);
 
         this.player = new Player(canvasWidth, canvasHeight, this.context, this.dpi, this, speed, game);
         
@@ -46,6 +46,8 @@ class Board {
                 this.createMatter(n + 200);
             } else if (this.matter.length < 500) {
                 this.createMatter(n);
+            } else {
+                this.createMatter(n / 3);
             }
         }, seconds * 1000);
     }
