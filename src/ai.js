@@ -110,8 +110,9 @@ class AI {
         } else if (object instanceof Player) {
             object.consumed = true;
             this.context.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
+            this.game.gameOver = true;
             cancelAnimationFrame(this.game.draw);
-            // this.gameOver();
+            
         }
     }
 

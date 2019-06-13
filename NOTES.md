@@ -41,3 +41,5 @@ BUGS!
 Circular dependency issues with modal
 
 AI distance calculations
+
+Runtime on restart

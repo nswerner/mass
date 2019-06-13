@@ -48,7 +48,6 @@ class Player {
         window.cheat = this.cheat;
 
         this.setIntervalX = this.setIntervalX.bind(this);
-        this.chainReaction = this.chainReaction.bind(this);
     }
 
     setIntervalX(callback, delay, repetitions) {
@@ -59,24 +58,8 @@ class Player {
 
             if (++x === repetitions) {
                 window.clearInterval(intervalID);
-                // window.cancelAnimationFrame();
             }
         }, delay);
-    }
-
-
-    // recursive approach is not working to animate the size increase
-    chainReaction(n) {
-    //     if (n <= 0) {
-    //         // let canvas = document.getElementById('canvas');
-    //         this.context.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
-    //         return;
-    //     };
-
-    //     this.mass += 0.1;
-    //     this.radius += 0.1;
-    //     this.draw();
-    //     return this.chainReaction(n-1);
     }
 
     gameOver() {
@@ -90,19 +73,16 @@ class Player {
 
             setTimeout(()=> {
                 clearInterval(myShrinkInterval);
-            }, 300);
+            }, 250);
 
             setTimeout(1000);
             
             let myGrowthInterval = setInterval(() => {
-                console.log('inside interval')
                 this.mass += this.mass * 0.01 + 1;
                 this.radius += this.mass * 0.01 + 1;
-                this.draw();
             }, 17);
 
             setTimeout(() => {
-                console.log('clearing interval');
                 clearInterval(myGrowthInterval);
                 }, 3000);
         }

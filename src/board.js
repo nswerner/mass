@@ -75,8 +75,13 @@ class Board {
     //     setInterval(() => this.createAI(n), seconds * 1000);
     // }
 
+    won() {
+        if (this.player.won) {
+            this.game = won;
+        }
+    }
+
     draw() {
-        this.fix_dpi();
         this.context.strokeStyle = 'black';
         this.context.lineWidth = 3;
         this.context.rect(0, 0, this.boardWidth, this.boardHeight);
