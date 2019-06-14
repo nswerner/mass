@@ -61,8 +61,9 @@ class Modal {
         this.gameoverModalBG.style.display ="none";
         this.startModalBG.style.display = "none";
         this.winModalBG.style.display = "none";
+
+        this.context.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
     
- 
         this.game = new Game(this.canvasWidth, this.canvasHeight, this.context, this.dpi, this);
         this.player = this.game.board.player;
         this.game.start();
@@ -72,12 +73,10 @@ class Modal {
     
     draw() {
         if (this.player === null || this.player.consumed === true) {
-            
             this.gameoverModalBG.style.display = "flex";
             this.restart = document.getElementsByClassName("restart")[0];
             this.restart.addEventListener('click', this.startGame);
         } else if (this.player.won === true) {
-            
             this.winModalBG.style.display = "flex";
             this.restart = document.getElementsByClassName("restart")[1];
             this.restart.addEventListener('click', this.startGame);
